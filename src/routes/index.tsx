@@ -249,11 +249,16 @@ function Index() {
             </div>
             <div className="grid gap-6 sm:grid-cols-2">
               {PILLARS.map((p) => (
-                <div key={p.title} className="rounded-md border border-border bg-card p-6 shadow-card">
-                  <div className="grid h-11 w-11 place-items-center rounded-sm bg-gradient-safety text-white">
-                    <p.icon className="h-5 w-5" />
+                <div
+                  key={p.title}
+                  className="group card-glass rounded-md p-6"
+                >
+                  <div className="grid h-11 w-11 place-items-center overflow-hidden rounded-sm border border-iron/15 bg-white/40 backdrop-blur-md backdrop-saturate-150 transition-colors group-hover:border-safety/50">
+                    <span className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-[oklch(0.72_0.19_45)] to-[oklch(0.60_0.20_40)] shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_2px_8px_rgba(245,124,0,0.45)] ring-1 ring-white/30 transition-transform duration-300 group-hover:rotate-[10deg]">
+                      <p.icon className="h-4 w-4 text-white" strokeWidth={2.2} />
+                    </span>
                   </div>
-                  <h3 className={`mt-4 text-lg font-semibold text-iron ${fontClass}`}>{p.title}</h3>
+                  <h3 className={`mt-4 text-lg font-semibold text-iron transition-colors group-hover:text-safety ${fontClass}`}>{p.title}</h3>
                   <p className={`mt-2 text-sm leading-relaxed text-muted-foreground ${fontClass}`}>{p.desc}</p>
                 </div>
               ))}

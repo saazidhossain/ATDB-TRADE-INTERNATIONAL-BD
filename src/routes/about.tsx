@@ -72,11 +72,11 @@ function AboutPage() {
             <p className={`eyebrow ${fontClassEyebrow}`}>{t("about.leadership")}</p>
             <h2 className={`mt-2 text-3xl font-bold text-iron ${fontClass}`}>{t("about.leadership.title")}</h2>
             <div className="mt-8 space-y-6">
-              <div className="rounded-md border border-border glass-card p-6 shadow-card border-safety-top">
+              <div className="card-glass rounded-md border-safety-top p-6">
                 <p className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}>{t("about.role.proprietor")}</p>
                 <p className="mt-1 font-display text-xl font-semibold text-iron">{COMPANY.proprietor}</p>
               </div>
-              <div className="rounded-md border border-border glass-card p-6 shadow-card border-safety-top">
+              <div className="card-glass rounded-md border-safety-top p-6">
                 <p className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}>{t("about.role.ceo")}</p>
                 <p className="mt-1 font-display text-xl font-semibold text-iron">{COMPANY.ceo}</p>
               </div>
@@ -178,7 +178,7 @@ function AboutPage() {
           </div>
 
           <div className="grid gap-4">
-            <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
+            <div className="card-glass-dark group rounded-md p-6">
               <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
                 <Globe2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
                 {t("about.associate.regions")}
@@ -196,7 +196,7 @@ function AboutPage() {
               </ul>
             </div>
 
-            <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
+            <div className="card-glass-dark group rounded-md p-6">
               <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
                 <Building2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
                 {t("about.eyebrow")}
