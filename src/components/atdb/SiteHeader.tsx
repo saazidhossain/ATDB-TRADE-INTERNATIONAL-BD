@@ -34,8 +34,10 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled ? "glass shadow-[0_4px_20px_-8px_rgba(0,0,0,0.15)]" : "bg-transparent border-transparent"
+      className={`sticky top-0 z-40 w-full transition-[background,box-shadow,backdrop-filter] duration-300 ${
+        scrolled
+          ? "glass-dark shadow-[0_4px_24px_-8px_rgba(0,0,0,0.45)]"
+          : "header-veil"
       }`}
     >
       <div
@@ -53,7 +55,7 @@ export function SiteHeader() {
             alt="ATDB Trade International"
             width={180}
             height={48}
-            className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.03] ${
+            className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.03] drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] ${
               scrolled ? "h-8 md:h-9 lg:h-10" : "h-9 md:h-11 lg:h-14"
             }`}
             fetchPriority="high"
@@ -65,7 +67,7 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className={`text-sm font-medium text-iron/80 transition-colors duration-200 hover:text-safety lg:text-[15px] ${fontClass}`}
+              className={`text-sm font-medium text-white/85 transition-colors duration-200 hover:text-safety lg:text-[15px] ${fontClass}`}
               activeProps={{ className: "text-safety" }}
               activeOptions={{ exact: n.to === "/" }}
             >
