@@ -59,6 +59,33 @@ export type Database = {
         }
         Relationships: []
       }
+      real_photos: {
+        Row: {
+          created_at: string
+          equipment_id: string
+          id: string
+          public_url: string
+          sort_index: number
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          equipment_id: string
+          id?: string
+          public_url: string
+          sort_index?: number
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          equipment_id?: string
+          id?: string
+          public_url?: string
+          sort_index?: number
+          storage_path?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
