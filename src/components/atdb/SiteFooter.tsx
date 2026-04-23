@@ -141,11 +141,8 @@ export function SiteFooter() {
                 {/* Text content */}
                 <span className="relative flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-bronze-glow to-safety" />
-                  <span className={`text-xs font-semibold uppercase tracking-[0.16em] text-white/90 transition-colors group-hover:text-bronze-glow ${fontClass}`}>
-                    Designed by
-                  </span>
                   <span className={`text-xs font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-bronze-glow via-safety to-bronze-glow bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 ${fontClass}`}>
-                    Sazid Hossain
+                    {t("footer.credit")}
                   </span>
                 </span>
               </a>
