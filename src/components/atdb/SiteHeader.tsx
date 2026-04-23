@@ -67,11 +67,17 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className={`text-sm font-medium text-white/85 transition-colors duration-200 hover:text-safety lg:text-[15px] ${fontClass}`}
-              activeProps={{ className: "text-safety" }}
+              className={`group relative text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white lg:text-[15px] ${fontClass}`}
+              activeProps={{
+                className: "!text-safety font-semibold",
+              }}
               activeOptions={{ exact: n.to === "/" }}
             >
               {n.label}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-safety transition-transform duration-300 ease-out group-hover:scale-x-50 group-data-[status=active]:scale-x-100"
+              />
             </Link>
           ))}
         </nav>
