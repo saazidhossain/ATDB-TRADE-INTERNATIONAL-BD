@@ -298,11 +298,37 @@
   }
 
   .glass-dark {
-    background: oklch(0.18 0.018 240 / 72%);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-bottom: 1px solid oklch(1 0 0 / 8%);
-    box-shadow: 0 8px 32px 0 oklch(0 0 0 / 25%);
+    /* Refined industrial glass — layered iron gradient with a warm safety
+       hairline that ties the header to the brand's CTA + footer accents. */
+    background:
+      linear-gradient(
+        180deg,
+        oklch(0.20 0.020 240 / 88%) 0%,
+        oklch(0.16 0.018 240 / 92%) 100%
+      );
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border-bottom: 1px solid oklch(1 0 0 / 6%);
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 4%) inset,
+      0 10px 32px -8px oklch(0 0 0 / 45%);
+    position: relative;
+  }
+  .glass-dark::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(0.70 0.19 45 / 55%) 30%,
+      oklch(0.70 0.19 45 / 55%) 70%,
+      transparent 100%
+    );
+    pointer-events: none;
   }
 
   /* Header at-top: barely-there dark veil so logo/nav stay legible
@@ -310,9 +336,12 @@
   .header-veil {
     background: linear-gradient(
       to bottom,
-      oklch(0.16 0.018 240 / 35%) 0%,
+      oklch(0.16 0.018 240 / 55%) 0%,
+      oklch(0.16 0.018 240 / 18%) 60%,
       oklch(0.16 0.018 240 / 0%) 100%
     );
+    backdrop-filter: blur(6px) saturate(140%);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
   }
 
   .glass-card {
