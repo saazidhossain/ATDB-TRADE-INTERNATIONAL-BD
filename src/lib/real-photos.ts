@@ -84,3 +84,44 @@ export function getRealPhotos(equipmentId: string): string[] {
 export function hasRealPhoto(equipmentId: string): boolean {
   return getRealPhotos(equipmentId).length > 0;
 }
+
+// ── Runtime (Cloud-uploaded) photos ────────────────────────────────────────
+// Build-time photos (above) + Cloud-uploaded photos (below) are merged in
+// `useAllRealPhotos` so the gallery and PDF stay in sync without duplicate code.
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+export type RuntimePhoto = { url: string; sort: number; createdAt: string };
+
+export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("real_photos")
+    .select("public_url, sort_index, created_at")
+    .eq("equipment_id", equipmentId.toUpperCase())
+    .order("sort_index", { ascending: true })
+    .order("created_at", { ascending: true });
+  if (error || !data) return [];
+  return data.map((r) => r.public_url);
+}
+
+/**
+ * React hook: returns the merged list of build-time + Cloud-uploaded photos
+ * for an equipment ID. Re-fetches when `bumpKey` changes (use after upload).
+ */
+export function useAllRealPhotos(equipmentId: string, bumpKey: number = 0): string[] {
+  const buildTime = getRealPhotos(equipmentId);
+  const [runtime, setRuntime] = useState<string[]>([]);
+  useEffect(() => {
+    let alive = true;
+    fetchRuntimePhotos(equipmentId).then((urls) => {
+      if (alive) setRuntime(urls);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [equipmentId, bumpKey]);
+  // De-duplicate by URL while preserving order (build-time first, then uploads).
+  const seen = new Set<string>();
+  return [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+}

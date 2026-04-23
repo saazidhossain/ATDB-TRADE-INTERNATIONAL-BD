@@ -516,6 +516,16 @@ export const TRANSLATIONS: Dict = {
   "fb.bullet.1": { en: "Real photos from active project sites across Bangladesh.", bn: "বাংলাদেশজুড়ে চলমান প্রজেক্ট সাইটের আসল ছবি।" },
   "fb.bullet.2": { en: "Equipment availability and mobilisation announcements.", bn: "ইকুইপমেন্ট অ্যাভেইলেবিলিটি ও মোবিলাইজেশন ঘোষণা।" },
   "fb.bullet.3": { en: "Behind-the-scenes from operators, riggers and crew.", bn: "অপারেটর, রিগার ও ক্রু-দের পর্দার আড়ালের মুহূর্ত।" },
+
+  // ─── Real photo upload widget ──────────────────────────────────
+  "realPhoto.upload.title": { en: "Upload a real photo", bn: "আসল ছবি আপলোড করুন" },
+  "realPhoto.upload.help": {
+    en: "Add a current-condition photo of this exact unit. It instantly appears in the gallery and the downloadable spec sheet. JPG, PNG or WebP, max 8 MB.",
+    bn: "এই ইউনিটের বর্তমান অবস্থার একটি ছবি যোগ করুন। সঙ্গে সঙ্গে গ্যালারি ও ডাউনলোডযোগ্য স্পেক শিটে দেখা যাবে। JPG, PNG বা WebP, সর্বোচ্চ ৮ MB।",
+  },
+  "realPhoto.upload.cta": { en: "Choose photo", bn: "ছবি বাছুন" },
+  "realPhoto.upload.uploading": { en: "Uploading…", bn: "আপলোড হচ্ছে…" },
+  "realPhoto.upload.success": { en: "Added to gallery & PDF", bn: "গ্যালারি ও PDF-এ যোগ হয়েছে" },
 };
 
 interface I18nCtx {

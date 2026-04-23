@@ -21,7 +21,8 @@ import {
 import { useI18n, useFontClass } from "@/lib/i18n";
 import { useCart } from "@/lib/cart";
 import { generateSpecSheet } from "@/lib/spec-sheet";
-import { getRealPhotos } from "@/lib/real-photos";
+import { useAllRealPhotos, fetchRuntimePhotos } from "@/lib/real-photos";
+import { RealPhotoUpload } from "@/components/atdb/RealPhotoUpload";
 import detailHero from "@/assets/eq-detail-crane.webp";
 import detailCabin from "@/assets/eq-detail-cabin.webp";
 import detailFleet from "@/assets/eq-detail-fleet.webp";
@@ -127,7 +128,8 @@ function EquipmentDetailPage() {
   const related = FLEET.filter((f) => f.category === eq.category && f.id !== eq.id).slice(0, 3);
   // Build gallery slots with captions. The third "extra" image is "cabin" for cranes, "site" otherwise.
   const thirdCaption: GallerySlot["captionKey"] = eq.category === "cranes" ? "gallery.cap.cabin" : "gallery.cap.site";
-  const realPhotos = getRealPhotos(eq.id);
+  const [photoBump, setPhotoBump] = useState(0);
+  const realPhotos = useAllRealPhotos(eq.id, photoBump);
   const realSlots: GallerySlot[] = realPhotos.map((src) => ({ src, captionKey: "gallery.cap.real" }));
 
   const baseSlots: GallerySlot[] = eq.gallery && eq.gallery.length >= 3
@@ -154,7 +156,9 @@ function EquipmentDetailPage() {
     if (pdfBusy) return;
     setPdfBusy(true);
     try {
-      await generateSpecSheet(eq);
+      // Pull the freshest list of Cloud-uploaded photos so the PDF is always in sync.
+      const runtime = await fetchRuntimePhotos(eq.id);
+      await generateSpecSheet(eq, runtime);
     } finally {
       setPdfBusy(false);
     }
@@ -194,7 +198,13 @@ function EquipmentDetailPage() {
       <section className="bg-background py-10 md:py-14">
         <div className="container-page grid gap-10 lg:grid-cols-[1.2fr_1fr]">
           {/* Gallery */}
-          <EquipmentGallery slots={gallerySlots} alt={eq.name} certifiedLabel={t("detail.certified")} />
+          <div>
+            <EquipmentGallery slots={gallerySlots} alt={eq.name} certifiedLabel={t("detail.certified")} />
+            <RealPhotoUpload
+              equipmentId={eq.id}
+              onUploaded={() => setPhotoBump((n) => n + 1)}
+            />
+          </div>
 
           {/* Info */}
           <div>
