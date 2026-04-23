@@ -26,7 +26,7 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="relative overflow-hidden bg-gradient-iron pb-24 text-white/85 md:pb-8">
+    <footer className="relative overflow-hidden bg-gradient-iron pb-28 text-white/85 md:pb-0">
       {/* Decorative top gradient line */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-bronze-glow/40 to-transparent" />
       {/* Ambient radial glow — subtle brand atmosphere */}
@@ -35,16 +35,16 @@ export function SiteFooter() {
         className="pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full opacity-[0.08] blur-3xl"
         style={{ background: "radial-gradient(circle, var(--safety) 0%, transparent 70%)" }}
       />
-      
-      <div className="container-page relative grid gap-10 py-14 sm:grid-cols-2 md:gap-12 md:py-16 lg:grid-cols-4">
-        <div className="sm:col-span-2 lg:col-span-1">
+
+      <div className="container-page relative grid gap-10 py-14 sm:grid-cols-2 md:gap-x-10 md:gap-y-12 md:py-16 lg:grid-cols-12">
+        <div className="sm:col-span-2 lg:col-span-4">
           <img src={logo} alt="ATDB Trade International" width={220} height={64} className="h-14 w-auto object-contain" />
           <p className={`mt-5 max-w-xs text-sm leading-relaxed text-white/65 ${fontClass}`}>
             {t("footer.tagline")}
           </p>
         </div>
 
-        <div>
+        <div className="lg:col-span-2">
           <h4 className="eyebrow !text-bronze-glow">{t("footer.explore")}</h4>
           <ul className="mt-4 space-y-2 text-sm">
             {links.map((i) => (
@@ -57,7 +57,7 @@ export function SiteFooter() {
           </ul>
         </div>
 
-        <div>
+        <div className="lg:col-span-3">
           <h4 className="eyebrow !text-bronze-glow">{t("footer.offices")}</h4>
           <ul className="mt-4 space-y-4 text-sm text-white/75">
             {COMPANY.offices.map((o) => {
@@ -75,7 +75,7 @@ export function SiteFooter() {
           </ul>
         </div>
 
-        <div>
+        <div className="sm:col-span-2 lg:col-span-3">
           <h4 className="eyebrow !text-bronze-glow">{t("footer.contact")}</h4>
           <ul className={`mt-4 space-y-2.5 text-sm text-white/75 ${fontClass}`}>
             <li>
@@ -117,7 +117,7 @@ export function SiteFooter() {
 
       {/* Premium Designer Credit Section */}
       <div className="relative border-t border-white/10">
-        <div className="container-page flex flex-col-reverse items-center justify-between gap-5 py-7 text-center md:flex-row md:gap-6 md:text-left">
+        <div className="container-page flex flex-col-reverse items-center justify-center gap-5 py-7 text-center md:flex-row md:flex-wrap md:justify-between md:gap-x-6 md:gap-y-4 md:pr-44 md:text-left lg:pr-52">
           {/* Designer Credit — Premium Branding */}
           <motion.div
             className="group relative flex items-center gap-3"
