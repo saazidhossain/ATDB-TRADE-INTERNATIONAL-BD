@@ -146,6 +146,7 @@ export const TRANSLATIONS: Dict = {
   "gallery.cap.detail": { en: "Detail", bn: "ডিটেইল" },
   "gallery.cap.site": { en: "Site context", bn: "সাইট কনটেক্সট" },
   "gallery.cap.cabin": { en: "Operator cabin", bn: "অপারেটর কেবিন" },
+  "gallery.cap.real": { en: "Real photo", bn: "আসল ছবি" },
   "gallery.lightbox.open": { en: "Open fullscreen", bn: "ফুলস্ক্রিনে দেখুন" },
   "gallery.lightbox.close": { en: "Close", bn: "বন্ধ করুন" },
   "gallery.lightbox.prev": { en: "Previous image", bn: "আগের ছবি" },
