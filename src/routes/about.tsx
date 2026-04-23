@@ -178,7 +178,7 @@ function AboutPage() {
           </div>
 
           <div className="grid gap-4">
-            <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
+            <div className="card-glass-dark group rounded-md p-6">
               <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
                 <Globe2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
                 {t("about.associate.regions")}
@@ -196,7 +196,7 @@ function AboutPage() {
               </ul>
             </div>
 
-            <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
+            <div className="card-glass-dark group rounded-md p-6">
               <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
                 <Building2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
                 {t("about.eyebrow")}
