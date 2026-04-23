@@ -34,8 +34,10 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        scrolled ? "glass shadow-[0_4px_20px_-8px_rgba(0,0,0,0.15)]" : "bg-transparent border-transparent"
+      className={`sticky top-0 z-40 w-full transition-[background,box-shadow,backdrop-filter] duration-300 ${
+        scrolled
+          ? "glass-dark shadow-[0_4px_24px_-8px_rgba(0,0,0,0.45)]"
+          : "header-veil"
       }`}
     >
       <div
@@ -53,7 +55,7 @@ export function SiteHeader() {
             alt="ATDB Trade International"
             width={180}
             height={48}
-            className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.03] ${
+            className={`w-auto object-contain transition-all duration-300 group-hover:scale-[1.03] drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] ${
               scrolled ? "h-8 md:h-9 lg:h-10" : "h-9 md:h-11 lg:h-14"
             }`}
             fetchPriority="high"
@@ -65,7 +67,7 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className={`text-sm font-medium text-iron/80 transition-colors duration-200 hover:text-safety lg:text-[15px] ${fontClass}`}
+              className={`text-sm font-medium text-white/85 transition-colors duration-200 hover:text-safety lg:text-[15px] ${fontClass}`}
               activeProps={{ className: "text-safety" }}
               activeOptions={{ exact: n.to === "/" }}
             >
@@ -105,7 +107,7 @@ export function SiteHeader() {
             </WhatsappButton>
           </div>
           <button
-            className="grid h-10 w-10 place-items-center rounded-sm border border-border md:hidden"
+            className="grid h-10 w-10 place-items-center rounded-sm border border-white/25 text-white transition-colors hover:border-white/50 md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={open}
@@ -192,12 +194,12 @@ function LangSwitch({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
     <button
       onClick={onToggle}
       aria-label={`Switch language to ${lang === "en" ? "Bengali" : "English"}`}
-      className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-iron/15 px-2.5 font-display text-xs font-semibold text-iron transition-colors hover:border-safety hover:text-safety"
+      className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-white/20 px-2.5 font-display text-xs font-semibold text-white/90 transition-colors hover:border-safety hover:text-safety"
     >
       <Globe className="h-3.5 w-3.5" />
-      <span className={lang === "en" ? "text-safety" : "text-iron/40"}>EN</span>
-      <span className="text-iron/30">/</span>
-      <span className={`font-bn ${lang === "bn" ? "text-safety" : "text-iron/40"}`}>বাং</span>
+      <span className={lang === "en" ? "text-safety" : "text-white/50"}>EN</span>
+      <span className="text-white/30">/</span>
+      <span className={`font-bn ${lang === "bn" ? "text-safety" : "text-white/50"}`}>বাং</span>
     </button>
   );
 }
