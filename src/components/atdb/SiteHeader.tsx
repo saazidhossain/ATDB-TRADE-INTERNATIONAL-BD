@@ -107,7 +107,7 @@ export function SiteHeader() {
             </WhatsappButton>
           </div>
           <button
-            className="grid h-10 w-10 place-items-center rounded-sm border border-border md:hidden"
+            className="grid h-10 w-10 place-items-center rounded-sm border border-white/25 text-white transition-colors hover:border-white/50 md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={open}
