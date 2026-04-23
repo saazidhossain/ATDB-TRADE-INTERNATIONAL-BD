@@ -230,7 +230,8 @@ export const TRANSLATIONS: Dict = {
   "footer.bank": { en: "Bank", bn: "ব্যাংক" },
   "footer.tagline": { en: "Bangladesh's premier heavy equipment rental partner. Since 2000.", bn: "বাংলাদেশের সেরা হেভি ইকুইপমেন্ট রেন্টাল পার্টনার। ২০০০ সাল থেকে।" },
   "footer.rights": { en: "All rights reserved.", bn: "সর্বস্বত্ব সংরক্ষিত।" },
-  "footer.credit": { en: "A SAZID HOSSAIN ARCHITECTURE", bn: "একটি সাজিদ হোসেন স্থাপত্য" },
+  "footer.credit": { en: "A SAZID HOSSAIN STRUCTURE", bn: "একটি সাজিদ হোসেন স্ট্রাকচার" },
+  "footer.creditBy": { en: "By", bn: "দ্বারা" },
 
   // ─── Cart ────────────────────────────────────────────────────────
   "common.addToQuote": { en: "Add to quote", bn: "কোটেশনে যোগ করুন" },
