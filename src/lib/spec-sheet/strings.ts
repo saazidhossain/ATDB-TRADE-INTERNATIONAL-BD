@@ -34,6 +34,8 @@ export interface Strings {
   hMobilisationV: string;
   hCompliance: string;
   hComplianceV: string;
+  realPhoto: string;
+  realPhotoCaption: string;
 }
 
 export const STRINGS_EN: Strings = {
@@ -70,4 +72,6 @@ export const STRINGS_EN: Strings = {
   hMobilisationV: "Nationwide deployment, 24/7 support",
   hCompliance: "Compliance",
   hComplianceV: "CIS-inspected · operator certified",
+  realPhoto: "Current Condition Photo",
+  realPhotoCaption: "Actual photograph of the unit on hand.",
 };

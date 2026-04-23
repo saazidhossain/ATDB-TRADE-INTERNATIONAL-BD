@@ -8,7 +8,13 @@ import { useI18n } from "@/lib/i18n";
 
 export type GallerySlot = {
   src: string;
-  captionKey: "gallery.cap.hero" | "gallery.cap.action" | "gallery.cap.detail" | "gallery.cap.site" | "gallery.cap.cabin";
+  captionKey:
+    | "gallery.cap.hero"
+    | "gallery.cap.action"
+    | "gallery.cap.detail"
+    | "gallery.cap.site"
+    | "gallery.cap.cabin"
+    | "gallery.cap.real";
 };
 
 interface Props {
@@ -96,7 +102,7 @@ export function EquipmentGallery({ slots, alt, certifiedLabel }: Props) {
           hidden: {},
           visible: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
         }}
-        className="mt-3 grid grid-cols-4 gap-2"
+        className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-5"
       >
         {slots.map((slot, i) => (
           <motion.div

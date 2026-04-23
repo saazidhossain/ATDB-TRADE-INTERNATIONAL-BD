@@ -26,12 +26,18 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="relative bg-gradient-iron pb-24 text-white/85 md:pb-8">
+    <footer className="relative overflow-hidden bg-gradient-iron pb-24 text-white/85 md:pb-8">
       {/* Decorative top gradient line */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-bronze-glow/40 to-transparent" />
+      {/* Ambient radial glow — subtle brand atmosphere */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full opacity-[0.08] blur-3xl"
+        style={{ background: "radial-gradient(circle, var(--safety) 0%, transparent 70%)" }}
+      />
       
-      <div className="container-page grid gap-12 py-16 md:grid-cols-4">
-        <div className="md:col-span-1">
+      <div className="container-page relative grid gap-10 py-14 sm:grid-cols-2 md:gap-12 md:py-16 lg:grid-cols-4">
+        <div className="sm:col-span-2 lg:col-span-1">
           <img src={logo} alt="ATDB Trade International" width={220} height={64} className="h-14 w-auto object-contain" />
           <p className={`mt-5 max-w-xs text-sm leading-relaxed text-white/65 ${fontClass}`}>
             {t("footer.tagline")}
@@ -73,26 +79,26 @@ export function SiteFooter() {
           <h4 className="eyebrow !text-bronze-glow">{t("footer.contact")}</h4>
           <ul className={`mt-4 space-y-2.5 text-sm text-white/75 ${fontClass}`}>
             <li>
-              <a href={`tel:${COMPANY.phones[0].number}`} className="inline-flex items-center gap-2.5 transition-colors hover:text-safety">
+              <a href={`tel:${COMPANY.phones[0].number}`} className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep rounded-sm">
                 <Phone className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2} />
                 <span>{COMPANY.phones[0].number}</span>
               </a>
             </li>
             <li>
-              <a href={`mailto:${COMPANY.email}`} className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety">
+              <a href={`mailto:${COMPANY.email}`} className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep rounded-sm">
                 <Mail className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2} />
                 <span>{COMPANY.email}</span>
               </a>
             </li>
           </ul>
 
-          <div className="mt-5 flex items-center gap-1">
+          <div className="mt-5 flex items-center gap-2">
             <a
               href={buildWhatsappGenericLink(undefined, lang)}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat on WhatsApp"
-              className="grid h-9 w-9 place-items-center rounded-sm text-white/65 transition-colors hover:bg-white/5 hover:text-safety"
+              className="group/icon grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-safety/40 hover:bg-white/10 hover:text-safety hover:shadow-[0_6px_18px_-4px_color-mix(in_oklab,var(--safety)_45%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep"
             >
               <MessageCircle className="h-4 w-4" strokeWidth={1.75} />
             </a>
@@ -101,7 +107,7 @@ export function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit ATDB on Facebook"
-              className="grid h-9 w-9 place-items-center rounded-sm text-white/65 transition-colors hover:bg-white/5 hover:text-safety"
+              className="group/icon grid h-10 w-10 place-items-center rounded-full border border-white/10 bg-white/5 text-white/70 backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-safety/40 hover:bg-white/10 hover:text-safety hover:shadow-[0_6px_18px_-4px_color-mix(in_oklab,var(--safety)_45%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep"
             >
               <Facebook className="h-4 w-4" strokeWidth={1.75} />
             </a>
@@ -110,8 +116,8 @@ export function SiteFooter() {
       </div>
 
       {/* Premium Designer Credit Section */}
-      <div className="border-t border-white/5">
-        <div className="container-page flex flex-col items-center justify-between gap-6 py-8 md:flex-row md:items-center">
+      <div className="relative border-t border-white/10">
+        <div className="container-page flex flex-col-reverse items-center justify-between gap-5 py-7 text-center md:flex-row md:gap-6 md:text-left">
           {/* Designer Credit — Premium Branding */}
           <motion.div
             className="group relative flex items-center gap-3"

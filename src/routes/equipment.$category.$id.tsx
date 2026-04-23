@@ -21,6 +21,7 @@ import {
 import { useI18n, useFontClass } from "@/lib/i18n";
 import { useCart } from "@/lib/cart";
 import { generateSpecSheet } from "@/lib/spec-sheet";
+import { getRealPhotos } from "@/lib/real-photos";
 import detailHero from "@/assets/eq-detail-crane.webp";
 import detailCabin from "@/assets/eq-detail-cabin.webp";
 import detailFleet from "@/assets/eq-detail-fleet.webp";
@@ -126,7 +127,10 @@ function EquipmentDetailPage() {
   const related = FLEET.filter((f) => f.category === eq.category && f.id !== eq.id).slice(0, 3);
   // Build gallery slots with captions. The third "extra" image is "cabin" for cranes, "site" otherwise.
   const thirdCaption: GallerySlot["captionKey"] = eq.category === "cranes" ? "gallery.cap.cabin" : "gallery.cap.site";
-  const gallerySlots: GallerySlot[] = eq.gallery && eq.gallery.length >= 3
+  const realPhotos = getRealPhotos(eq.id);
+  const realSlots: GallerySlot[] = realPhotos.map((src) => ({ src, captionKey: "gallery.cap.real" }));
+
+  const baseSlots: GallerySlot[] = eq.gallery && eq.gallery.length >= 3
     ? [
         { src: eq.image, captionKey: "gallery.cap.hero" },
         { src: eq.gallery[0], captionKey: "gallery.cap.action" },
@@ -139,6 +143,8 @@ function EquipmentDetailPage() {
         { src: detailCabin, captionKey: "gallery.cap.cabin" },
         { src: detailFleet, captionKey: "gallery.cap.site" },
       ];
+  // Inject the real / current-condition photos right after the hero shot.
+  const gallerySlots: GallerySlot[] = [baseSlots[0], ...realSlots, ...baseSlots.slice(1)];
   const whatsappUrl = buildWhatsappRentLink(eq, lang);
   const { add, items } = useCart();
   const inCart = items.some((i) => i.id === eq.id);
