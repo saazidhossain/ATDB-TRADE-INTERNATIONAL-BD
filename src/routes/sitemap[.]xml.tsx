@@ -9,7 +9,6 @@ function getOrigin(request: Request): string {
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
-  // @ts-expect-error TanStack Start `server` option not in router type defs
   server: {
     handlers: {
       GET: async ({ request }: { request: Request }) => {

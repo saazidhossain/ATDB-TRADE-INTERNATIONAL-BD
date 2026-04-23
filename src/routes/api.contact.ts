@@ -71,7 +71,6 @@ async function hashIp(ip: string): Promise<string> {
 }
 
 export const Route = createFileRoute("/api/contact")({
-  // @ts-expect-error TanStack Start `server` option not in router type defs
   server: {
     handlers: {
       OPTIONS: async () => new Response(null, { status: 204, headers: CORS }),
