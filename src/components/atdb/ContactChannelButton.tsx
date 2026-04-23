@@ -81,11 +81,11 @@ export function ContactChannelButton({
         whileHover={{ y: -2, scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: "spring", stiffness: 320, damping: 20 }}
-        className={`group relative hidden h-9 w-9 place-items-center overflow-hidden rounded-full border border-white/15 bg-white/5 backdrop-blur-md backdrop-saturate-150 transition-colors ${accent.ringHover} hover:bg-white/10 sm:grid ${className}`}
+        className={`group relative hidden h-9 w-9 place-items-center overflow-hidden rounded-full border border-white/15 bg-white/5 backdrop-blur-md backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ease-out ${accent.ringHover} hover:bg-white/10 focus-visible:border-safety focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep sm:grid ${className}`}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
+          className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90 group-focus-visible:opacity-90"
           style={{ background: accent.haloHeader }}
         />
         <span
