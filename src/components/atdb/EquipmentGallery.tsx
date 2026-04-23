@@ -8,7 +8,13 @@ import { useI18n } from "@/lib/i18n";
 
 export type GallerySlot = {
   src: string;
-  captionKey: "gallery.cap.hero" | "gallery.cap.action" | "gallery.cap.detail" | "gallery.cap.site" | "gallery.cap.cabin";
+  captionKey:
+    | "gallery.cap.hero"
+    | "gallery.cap.action"
+    | "gallery.cap.detail"
+    | "gallery.cap.site"
+    | "gallery.cap.cabin"
+    | "gallery.cap.real";
 };
 
 interface Props {
