@@ -88,11 +88,12 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2">
           <CartButton />
           <LangSwitch lang={lang} onToggle={toggleLang} />
           {/* Unified social/contact channel row — equal alignment */}
           <div className="hidden items-center gap-1.5 sm:flex">
+            <span aria-hidden className="mx-1 hidden h-5 w-px bg-white/15 sm:inline-block" />
             <FacebookLink variant="header" />
             <ContactChannelButton
               channel="phone"
@@ -110,6 +111,7 @@ export function SiteHeader() {
             >
               Email
             </ContactChannelButton>
+            <span aria-hidden className="mx-1 hidden h-5 w-px bg-white/15 md:inline-block" />
             <WhatsappButton
               href={buildWhatsappGenericLink(undefined, lang)}
               variant="header"
@@ -119,7 +121,7 @@ export function SiteHeader() {
             </WhatsappButton>
           </div>
           <button
-            className="grid h-10 w-10 place-items-center rounded-sm border border-white/25 text-white transition-colors hover:border-white/50 md:hidden"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-white backdrop-blur-md transition-colors hover:border-safety/60 hover:bg-white/10 md:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
             aria-expanded={open}
@@ -210,11 +212,11 @@ function LangSwitch({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
     <button
       onClick={onToggle}
       aria-label={`Switch language to ${lang === "en" ? "Bengali" : "English"}`}
-      className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-white/20 px-2.5 font-display text-xs font-semibold text-white/90 transition-colors hover:border-safety hover:text-safety"
+      className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-full border border-white/15 bg-white/5 px-3 font-display text-xs font-semibold text-white/90 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:-translate-y-0.5 hover:border-safety/60 hover:bg-white/10 hover:text-safety"
     >
-      <Globe className="h-3.5 w-3.5" />
+      <Globe className="h-3.5 w-3.5 transition-transform duration-500 group-hover:rotate-180" />
       <span className={lang === "en" ? "text-safety" : "text-white/50"}>EN</span>
-      <span className="text-white/30">/</span>
+      <span className="text-white/25">/</span>
       <span className={`font-bn ${lang === "bn" ? "text-safety" : "text-white/50"}`}>বাং</span>
     </button>
   );

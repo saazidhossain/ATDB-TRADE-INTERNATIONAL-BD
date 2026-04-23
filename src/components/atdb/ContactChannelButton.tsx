@@ -81,16 +81,16 @@ export function ContactChannelButton({
         whileHover={{ y: -2, scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: "spring", stiffness: 320, damping: 20 }}
-        className={`group relative hidden h-9 w-9 place-items-center overflow-hidden rounded-sm border border-iron/15 bg-white/40 backdrop-blur-md backdrop-saturate-150 transition-colors ${accent.ringHover} hover:bg-white/70 sm:grid ${className}`}
+        className={`group relative hidden h-9 w-9 place-items-center overflow-hidden rounded-full border border-white/15 bg-white/5 backdrop-blur-md backdrop-saturate-150 transition-colors ${accent.ringHover} hover:bg-white/10 sm:grid ${className}`}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-sm opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
+          className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
           style={{ background: accent.haloHeader }}
         />
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
         <span
           className={`relative grid h-6 w-6 place-items-center rounded-full ${accent.orbBg} ${accent.orbShadow} ring-1 ring-white/30 transition-transform duration-300 group-hover:rotate-[12deg]`}
