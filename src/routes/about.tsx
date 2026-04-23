@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout } from "@/components/atdb/Layout";
 import { COMPANY } from "@/lib/atdb-data";
-import { ShieldCheck, FileCheck, Building2, Leaf } from "lucide-react";
+import { ShieldCheck, FileCheck, Building2, Leaf, Globe2, Users, HardHat, Briefcase, LineChart } from "lucide-react";
 import { useI18n, useFontClass } from "@/lib/i18n";
 import aboutOg from "@/assets/brand/atdb-hero-monument.webp";
 
@@ -34,6 +34,22 @@ function AboutPage() {
   const CREDENTIALS: Array<[string, string]> = [
     [t("about.cred.inspection"), t("spec.val.cis")],
     [t("about.cred.class"), t("about.cred.classV")],
+  ];
+
+  const ASSOCIATE_TAGS = [
+    { icon: Users, label: t("about.associate.tag.hr") },
+    { icon: HardHat, label: t("about.associate.tag.civil") },
+    { icon: Briefcase, label: t("about.associate.tag.consult") },
+    { icon: LineChart, label: t("about.associate.tag.bizdev") },
+  ];
+
+  const ASSOCIATE_REGIONS = ["Japan", "South Korea", "China", "Europe", "USA", "Middle East"];
+  const ASSOCIATE_PROJECTS = [
+    "Jamuna Bridge",
+    "MRT Line-6",
+    "BRT Project",
+    "Digital Telecom",
+    "Hydrocarbon",
   ];
 
   return (
@@ -116,6 +132,79 @@ function AboutPage() {
                 <p className={`relative mt-2 text-sm text-muted-foreground ${fontClass}`}>{v.d}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Associate MBA Provision ──────────────────────────── */}
+      <section className="relative overflow-hidden bg-iron-deep py-24 text-white">
+        {/* subtle radial accent */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(80% 60% at 50% 0%, rgba(245,124,0,0.18), transparent 70%)",
+          }}
+        />
+        <div className="container-page relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <div>
+            <p className={`eyebrow !text-bronze-glow ${fontClassEyebrow}`}>{t("about.associate.eyebrow")}</p>
+            <h2 className={`mt-2 max-w-2xl text-3xl font-bold text-white md:text-4xl ${fontClass}`}>
+              {t("about.associate.title")}
+            </h2>
+            <p className={`mt-5 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg ${fontClass}`}>
+              {t("about.associate.body")}
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              {ASSOCIATE_TAGS.map((tag) => (
+                <span
+                  key={tag.label}
+                  className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md ${fontClass}`}
+                >
+                  <tag.icon className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+                  {tag.label}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
+              <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
+                <Globe2 className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+                {t("about.associate.regions")}
+              </p>
+              <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {ASSOCIATE_REGIONS.map((r) => (
+                  <li
+                    key={r}
+                    className="flex items-center gap-2 text-sm font-medium text-white/90"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-safety" aria-hidden />
+                    {r}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
+              <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
+                <Building2 className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+                {t("about.eyebrow")}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {ASSOCIATE_PROJECTS.map((p) => (
+                  <span
+                    key={p}
+                    className="inline-flex items-center rounded-sm border border-white/10 bg-iron/40 px-2.5 py-1 font-display text-xs font-semibold tracking-wide text-white/85"
+                  >
+                    {p}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
