@@ -102,7 +102,7 @@ export function EquipmentGallery({ slots, alt, certifiedLabel }: Props) {
           hidden: {},
           visible: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
         }}
-        className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-5"
+        className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-5"
       >
         {slots.map((slot, i) => (
           <motion.div
