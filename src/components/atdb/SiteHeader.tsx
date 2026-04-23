@@ -67,11 +67,17 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className={`text-sm font-medium text-white/85 transition-colors duration-200 hover:text-safety lg:text-[15px] ${fontClass}`}
-              activeProps={{ className: "text-safety" }}
+              className={`group relative text-sm font-medium text-white/80 transition-colors duration-200 hover:text-white lg:text-[15px] ${fontClass}`}
+              activeProps={{
+                className: "!text-safety font-semibold",
+              }}
               activeOptions={{ exact: n.to === "/" }}
             >
               {n.label}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-safety transition-transform duration-300 ease-out group-hover:scale-x-50 group-data-[status=active]:scale-x-100"
+              />
             </Link>
           ))}
         </nav>
@@ -125,8 +131,12 @@ export function SiteHeader() {
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className={`border-b border-border/60 py-3.5 text-[15px] font-medium text-iron ${fontClass}`}
-                activeProps={{ className: "text-safety" }}
+                className={`relative border-b border-border/60 py-3.5 pl-3 text-[15px] font-medium text-iron transition-colors hover:text-safety ${fontClass}`}
+                activeProps={{
+                  className:
+                    "!text-safety font-semibold bg-safety/5 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-safety",
+                }}
+                activeOptions={{ exact: n.to === "/" }}
               >
                 {n.label}
               </Link>
