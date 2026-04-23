@@ -57,12 +57,12 @@ export function WhatsappButton({
         whileHover={{ y: -2, scale: 1.04 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: "spring", stiffness: 320, damping: 20 }}
-        className={`group relative hidden h-10 items-center gap-2 overflow-hidden rounded-sm border border-whatsapp/30 bg-whatsapp px-4 text-sm font-semibold text-white shadow-cta backdrop-blur-md transition-colors hover:border-whatsapp md:inline-flex ${fontClass} ${className}`}
+        className={`group relative hidden h-9 items-center gap-2 overflow-hidden rounded-full border border-whatsapp/40 bg-gradient-to-br from-whatsapp to-[hsl(140,55%,38%)] pl-1.5 pr-4 text-sm font-semibold text-white shadow-[0_6px_18px_-6px_rgba(37,211,102,0.6)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-whatsapp md:inline-flex ${fontClass} ${className}`}
       >
         {/* gradient halo */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-sm opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
+          className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
           style={{
             background:
               "linear-gradient(120deg, rgba(37,211,102,0.55), rgba(245,124,0,0.4), rgba(37,211,102,0.55))",
@@ -73,7 +73,7 @@ export function WhatsappButton({
           aria-hidden
           className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
-        <span className="relative grid h-6 w-6 place-items-center rounded-full bg-white/15 ring-1 ring-white/30 transition-transform duration-300 group-hover:rotate-[10deg]">
+        <span className="relative grid h-7 w-7 place-items-center rounded-full bg-white/20 ring-1 ring-white/40 transition-transform duration-300 group-hover:rotate-[10deg]">
           <WaGlyph className="h-3.5 w-3.5 fill-white" />
         </span>
         <span className="relative z-10">{children}</span>
