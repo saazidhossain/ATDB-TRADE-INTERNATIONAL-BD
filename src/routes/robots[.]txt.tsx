@@ -8,7 +8,6 @@ function getOrigin(request: Request): string {
 }
 
 export const Route = createFileRoute("/robots.txt")({
-  // @ts-expect-error TanStack Start `server` option not in router type defs
   server: {
     handlers: {
       GET: async ({ request }: { request: Request }) => {
