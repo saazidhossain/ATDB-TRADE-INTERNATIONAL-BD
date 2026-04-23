@@ -116,8 +116,8 @@ export function SiteFooter() {
       </div>
 
       {/* Premium Designer Credit Section */}
-      <div className="relative border-t border-white/10">
-        <div className="container-page flex flex-col-reverse items-center justify-center gap-5 py-7 text-center md:flex-row md:flex-wrap md:justify-between md:gap-x-6 md:gap-y-4 md:pr-52 md:text-left lg:pr-60">
+      <div className="relative border-t border-white/10 md:pr-56 lg:pr-0">
+        <div className="container-page flex flex-col-reverse items-center justify-center gap-5 py-7 text-center md:flex-row md:flex-wrap md:justify-between md:gap-x-6 md:gap-y-4 md:text-left lg:pr-56 xl:pr-0">
           {/* Designer Credit — Premium Branding */}
           <motion.div
             className="group relative flex items-center gap-3"
