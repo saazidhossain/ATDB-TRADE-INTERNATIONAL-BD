@@ -57,12 +57,12 @@ export function WhatsappButton({
         whileHover={{ y: -2, scale: 1.04 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: "spring", stiffness: 320, damping: 20 }}
-        className={`group relative hidden h-9 items-center gap-2 overflow-hidden rounded-full border border-whatsapp/40 bg-gradient-to-br from-whatsapp to-[hsl(140,55%,38%)] pl-1.5 pr-4 text-sm font-semibold text-white shadow-[0_6px_18px_-6px_rgba(37,211,102,0.6)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-whatsapp md:inline-flex ${fontClass} ${className}`}
+        className={`group relative hidden h-9 items-center gap-2 overflow-hidden rounded-full border border-whatsapp/40 bg-gradient-to-br from-whatsapp to-[hsl(140,55%,38%)] pl-1.5 pr-3.5 text-sm font-semibold text-white shadow-[0_6px_18px_-6px_rgba(37,211,102,0.6)] backdrop-blur-md transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out hover:-translate-y-0.5 hover:border-whatsapp focus-visible:-translate-y-0.5 focus-visible:border-whatsapp focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep md:inline-flex lg:pr-4 ${fontClass} ${className}`}
       >
         {/* gradient halo */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
+          className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90 group-focus-visible:opacity-90"
           style={{
             background:
               "linear-gradient(120deg, rgba(37,211,102,0.55), rgba(245,124,0,0.4), rgba(37,211,102,0.55))",

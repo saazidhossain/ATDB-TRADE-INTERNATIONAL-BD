@@ -386,6 +386,23 @@
     transition: background 400ms ease;
   }
 
+  /* Inner header controls subtly tighten as the bar scrolls — gives a
+     coordinated "settling" feel where every pill, divider and button
+     responds to the same --header-progress driven by the header surface. */
+  .header-surface :where(button, a, [role="group"] > span) {
+    transition:
+      transform 400ms ease,
+      opacity 400ms ease,
+      background-color 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease,
+      color 300ms ease;
+  }
+  .header-surface [role="group"] > span[aria-hidden="true"] {
+    /* Dividers fade in as the header consolidates. */
+    opacity: calc(0.35 + 0.65 * var(--header-progress));
+  }
+
   /* Legacy at-top veil — kept for any consumer that referenced it. */
   .header-veil {
     background: linear-gradient(

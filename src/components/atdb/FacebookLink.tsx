@@ -74,12 +74,12 @@ export function FacebookLink({ variant = "header", label, className = "" }: Face
       whileHover={{ y: -2, scale: 1.06 }}
       whileTap={{ scale: 0.94 }}
       transition={{ type: "spring", stiffness: 320, damping: 20 }}
-      className={`group relative hidden h-9 w-9 place-items-center overflow-hidden rounded-full border border-white/15 bg-white/5 backdrop-blur-md backdrop-saturate-150 transition-colors hover:border-[#1877F2]/60 hover:bg-white/10 sm:grid ${className}`}
+      className={`group relative hidden h-9 w-9 place-items-center overflow-hidden rounded-full border border-white/15 bg-white/5 backdrop-blur-md backdrop-saturate-150 transition-[background-color,border-color,box-shadow] duration-300 ease-out hover:border-[#1877F2]/60 hover:bg-white/10 focus-visible:border-[#1877F2] focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1877F2] focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep sm:grid ${className}`}
     >
       {/* animated gradient ring on hover */}
       <span
         aria-hidden
-        className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90"
+        className="pointer-events-none absolute -inset-px rounded-full opacity-0 blur-[6px] transition-opacity duration-500 group-hover:opacity-90 group-focus-visible:opacity-90"
         style={{
           background:
             "linear-gradient(120deg, rgba(24,119,242,0.45), rgba(245,124,0,0.35), rgba(24,119,242,0.45))",

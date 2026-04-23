@@ -45,9 +45,17 @@ export function SiteHeader() {
     <header
       className="header-surface sticky top-0 z-40 w-full"
       style={{ ["--header-progress" as never]: progress.toFixed(3) }}
+      role="banner"
     >
+      {/* Skip link — first focusable element for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-sm focus:bg-safety focus:px-3 focus:py-2 focus:font-display focus:text-xs focus:font-semibold focus:uppercase focus:tracking-wider focus:text-white focus:shadow-cta"
+      >
+        Skip to content
+      </a>
       <div
-        className={`container-page flex items-center justify-between gap-4 transition-all duration-300 ${
+        className={`container-page flex items-center justify-between gap-2 transition-all duration-300 sm:gap-3 lg:gap-4 ${
           scrolled ? "h-14 md:h-16 lg:h-16" : "h-16 md:h-20 lg:h-24 lg:py-2"
         }`}
       >
@@ -88,30 +96,30 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1.5 md:gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2" role="group" aria-label="Site actions">
           <CartButton />
           <LangSwitch lang={lang} onToggle={toggleLang} />
           {/* Unified social/contact channel row — equal alignment */}
-          <div className="hidden items-center gap-1.5 sm:flex">
-            <span aria-hidden className="mx-1 hidden h-5 w-px bg-white/15 sm:inline-block" />
+          <div className="hidden items-center gap-1.5 sm:flex" role="group" aria-label="Contact channels">
+            <span aria-hidden="true" className="mx-0.5 h-5 w-px bg-white/15 lg:mx-1" />
             <FacebookLink variant="header" />
             <ContactChannelButton
               channel="phone"
               href={`tel:${COMPANY.phones[0].number}`}
-              ariaLabel={`Call ${COMPANY.phones[0].number}`}
+              ariaLabel={`${t("nav.call")} ${COMPANY.phones[0].number}`}
               variant="header"
             >
-              Call
+              {t("nav.call")}
             </ContactChannelButton>
             <ContactChannelButton
               channel="email"
               href={`mailto:${COMPANY.email}`}
-              ariaLabel={`Email ${COMPANY.email}`}
+              ariaLabel={`${t("nav.email")} ${COMPANY.email}`}
               variant="header"
             >
-              Email
+              {t("nav.email")}
             </ContactChannelButton>
-            <span aria-hidden className="mx-1 hidden h-5 w-px bg-white/15 md:inline-block" />
+            <span aria-hidden="true" className="mx-0.5 hidden h-5 w-px bg-white/15 md:inline-block lg:mx-1" />
             <WhatsappButton
               href={buildWhatsappGenericLink(undefined, lang)}
               variant="header"
@@ -121,10 +129,12 @@ export function SiteHeader() {
             </WhatsappButton>
           </div>
           <button
-            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-white backdrop-blur-md transition-colors hover:border-safety/60 hover:bg-white/10 md:hidden"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-white/5 text-white backdrop-blur-md transition-colors hover:border-safety/60 hover:bg-white/10 focus-visible:border-safety focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep md:hidden"
             onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={open}
+            aria-controls="mobile-nav"
+            type="button"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -132,8 +142,8 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background md:hidden">
-          <nav className="container-page flex flex-col py-2" aria-label="Mobile">
+        <div id="mobile-nav" className="border-t border-border bg-background md:hidden">
+          <nav className="container-page flex flex-col py-2" aria-label="Mobile navigation">
             {NAV.map((n) => (
               <Link
                 key={n.to}
@@ -208,16 +218,20 @@ export function SiteHeader() {
 }
 
 function LangSwitch({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
+  const nextLang = lang === "en" ? "Bengali" : "English";
   return (
     <button
       onClick={onToggle}
-      aria-label={`Switch language to ${lang === "en" ? "Bengali" : "English"}`}
-      className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-full border border-white/15 bg-white/5 px-3 font-display text-xs font-semibold text-white/90 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:-translate-y-0.5 hover:border-safety/60 hover:bg-white/10 hover:text-safety"
+      type="button"
+      aria-label={`Switch language to ${nextLang}`}
+      aria-live="polite"
+      title={`Switch to ${nextLang}`}
+      className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-full border border-white/15 bg-white/5 px-3 font-display text-xs font-semibold text-white/90 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:-translate-y-0.5 hover:border-safety/60 hover:bg-white/10 hover:text-safety focus-visible:-translate-y-0.5 focus-visible:border-safety focus-visible:bg-white/10 focus-visible:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep"
     >
-      <Globe className="h-3.5 w-3.5 transition-transform duration-500 group-hover:rotate-180" />
-      <span className={lang === "en" ? "text-safety" : "text-white/50"}>EN</span>
+      <Globe aria-hidden="true" className="h-3.5 w-3.5 transition-transform duration-500 group-hover:rotate-180 group-focus-visible:rotate-180" />
+      <span aria-current={lang === "en" ? "true" : undefined} className={lang === "en" ? "text-safety" : "text-white/50"}>EN</span>
       <span className="text-white/25">/</span>
-      <span className={`font-bn ${lang === "bn" ? "text-safety" : "text-white/50"}`}>বাং</span>
+      <span aria-current={lang === "bn" ? "true" : undefined} className={`font-bn ${lang === "bn" ? "text-safety" : "text-white/50"}`}>বাং</span>
     </button>
   );
 }

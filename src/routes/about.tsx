@@ -147,42 +147,49 @@ function AboutPage() {
               "radial-gradient(80% 60% at 50% 0%, rgba(245,124,0,0.18), transparent 70%)",
           }}
         />
-        <div className="container-page relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+        <div className="container-page relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-14">
           <div>
             <p className={`eyebrow !text-bronze-glow ${fontClassEyebrow}`}>{t("about.associate.eyebrow")}</p>
-            <h2 className={`mt-2 max-w-2xl text-3xl font-bold text-white md:text-4xl ${fontClass}`}>
+            <h2 className={`mt-2 max-w-[28ch] text-balance text-3xl font-bold leading-[1.15] text-white md:text-4xl md:leading-[1.18] ${fontClass}`}>
               {t("about.associate.title")}
             </h2>
-            <p className={`mt-5 max-w-2xl text-base leading-relaxed text-white/80 md:text-lg ${fontClass}`}>
+            <p
+              className={`mt-5 max-w-[62ch] text-base text-white/80 md:text-[17px] ${fontClass} ${
+                lang === "bn" ? "leading-[1.95]" : "leading-[1.75]"
+              }`}
+            >
               {t("about.associate.body")}
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-2.5">
+            <ul className="mt-8 flex flex-wrap gap-x-2.5 gap-y-3" aria-label={t("about.associate.eyebrow")}>
               {ASSOCIATE_TAGS.map((tag) => (
-                <span
-                  key={tag.label}
-                  className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/90 backdrop-blur-md ${fontClass}`}
-                >
-                  <tag.icon className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
-                  {tag.label}
-                </span>
+                <li key={tag.label}>
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium leading-none text-white/90 backdrop-blur-md ${fontClass} ${
+                      lang === "bn" ? "py-2 text-[13px] leading-[1.4]" : ""
+                    }`}
+                  >
+                    <tag.icon aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-bronze-glow" strokeWidth={2.2} />
+                    {tag.label}
+                  </span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <div className="grid gap-4">
             <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
               <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
-                <Globe2 className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+                <Globe2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
                 {t("about.associate.regions")}
               </p>
-              <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 sm:grid-cols-3">
                 {ASSOCIATE_REGIONS.map((r) => (
                   <li
                     key={r}
-                    className="flex items-center gap-2 text-sm font-medium text-white/90"
+                    className={`flex items-center gap-2 text-sm font-medium leading-snug text-white/90 ${fontClass}`}
                   >
-                    <span className="h-1.5 w-1.5 rounded-full bg-safety" aria-hidden />
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-safety" aria-hidden />
                     {r}
                   </li>
                 ))}
@@ -191,19 +198,18 @@ function AboutPage() {
 
             <div className="rounded-md border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md">
               <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
-                <Building2 className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+                <Building2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
                 {t("about.eyebrow")}
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <ul className="mt-4 flex flex-wrap gap-2">
                 {ASSOCIATE_PROJECTS.map((p) => (
-                  <span
-                    key={p}
-                    className="inline-flex items-center rounded-sm border border-white/10 bg-iron/40 px-2.5 py-1 font-display text-xs font-semibold tracking-wide text-white/85"
-                  >
-                    {p}
-                  </span>
+                  <li key={p}>
+                    <span className="inline-flex items-center rounded-sm border border-white/10 bg-iron/40 px-2.5 py-1.5 font-display text-xs font-semibold leading-none tracking-wide text-white/85">
+                      {p}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
         </div>
