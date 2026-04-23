@@ -12,11 +12,20 @@ import { ContactChannelButton } from "./ContactChannelButton";
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { lang, setLang, t } = useI18n();
   const fontClass = useFontClass();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    // Smooth interpolation between 0 (at top) and 1 (fully scrolled)
+    // across a 120px range — feeds the CSS --header-progress var.
+    const RANGE = 120;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const p = Math.min(1, Math.max(0, y / RANGE));
+      setProgress(p);
+      setScrolled(y > 80);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -34,11 +43,8 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-40 w-full transition-[background,box-shadow,backdrop-filter] duration-300 ${
-        scrolled
-          ? "glass-dark shadow-[0_4px_24px_-8px_rgba(0,0,0,0.45)]"
-          : "header-veil"
-      }`}
+      className="header-surface sticky top-0 z-40 w-full"
+      style={{ ["--header-progress" as never]: progress.toFixed(3) }}
     >
       <div
         className={`container-page flex items-center justify-between gap-4 transition-all duration-300 ${
