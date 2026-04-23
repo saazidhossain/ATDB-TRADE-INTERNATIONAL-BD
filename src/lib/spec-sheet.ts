@@ -11,7 +11,7 @@ import { renderFooter } from "./spec-sheet/footer";
 import { renderRealPhotos } from "./spec-sheet/real-photo";
 import { getRealPhotos } from "./real-photos";
 
-export async function generateSpecSheet(eq: Equipment) {
+export async function generateSpecSheet(eq: Equipment, extraPhotos: string[] = []) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const S = STRINGS_EN;
 
@@ -23,7 +23,12 @@ export async function generateSpecSheet(eq: Equipment) {
 
   const afterHeader = await renderHeader(doc, eq, S, dateStr);
   const afterTable = renderSpecsTable(doc, eq, S, afterHeader);
-  const realPhotos = getRealPhotos(eq.id);
+  // Merge build-time photos + any caller-supplied (e.g. Cloud-uploaded) photos,
+  // de-duplicated while preserving order.
+  const seen = new Set<string>();
+  const realPhotos = [...getRealPhotos(eq.id), ...extraPhotos].filter((u) =>
+    seen.has(u) ? false : (seen.add(u), true),
+  );
   const afterReal = await renderRealPhotos(doc, S, realPhotos, afterTable);
   renderFooter(doc, S, dateStr, afterReal);
 
