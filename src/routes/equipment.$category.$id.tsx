@@ -198,7 +198,13 @@ function EquipmentDetailPage() {
       <section className="bg-background py-10 md:py-14">
         <div className="container-page grid gap-10 lg:grid-cols-[1.2fr_1fr]">
           {/* Gallery */}
-          <EquipmentGallery slots={gallerySlots} alt={eq.name} certifiedLabel={t("detail.certified")} />
+          <div>
+            <EquipmentGallery slots={gallerySlots} alt={eq.name} certifiedLabel={t("detail.certified")} />
+            <RealPhotoUpload
+              equipmentId={eq.id}
+              onUploaded={() => setPhotoBump((n) => n + 1)}
+            />
+          </div>
 
           {/* Info */}
           <div>
