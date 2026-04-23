@@ -131,8 +131,12 @@ export function SiteHeader() {
                 key={n.to}
                 to={n.to}
                 onClick={() => setOpen(false)}
-                className={`border-b border-border/60 py-3.5 text-[15px] font-medium text-iron ${fontClass}`}
-                activeProps={{ className: "text-safety" }}
+                className={`relative border-b border-border/60 py-3.5 pl-3 text-[15px] font-medium text-iron transition-colors hover:text-safety ${fontClass}`}
+                activeProps={{
+                  className:
+                    "!text-safety font-semibold bg-safety/5 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[3px] before:rounded-full before:bg-safety",
+                }}
+                activeOptions={{ exact: n.to === "/" }}
               >
                 {n.label}
               </Link>
