@@ -72,11 +72,11 @@ function AboutPage() {
             <p className={`eyebrow ${fontClassEyebrow}`}>{t("about.leadership")}</p>
             <h2 className={`mt-2 text-3xl font-bold text-iron ${fontClass}`}>{t("about.leadership.title")}</h2>
             <div className="mt-8 space-y-6">
-              <div className="rounded-md border border-border glass-card p-6 shadow-card border-safety-top">
+              <div className="card-glass rounded-md border-safety-top p-6">
                 <p className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}>{t("about.role.proprietor")}</p>
                 <p className="mt-1 font-display text-xl font-semibold text-iron">{COMPANY.proprietor}</p>
               </div>
-              <div className="rounded-md border border-border glass-card p-6 shadow-card border-safety-top">
+              <div className="card-glass rounded-md border-safety-top p-6">
                 <p className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}>{t("about.role.ceo")}</p>
                 <p className="mt-1 font-display text-xl font-semibold text-iron">{COMPANY.ceo}</p>
               </div>
