@@ -89,7 +89,7 @@ export function hasRealPhoto(equipmentId: string): boolean {
 // Build-time photos (above) + Cloud-uploaded photos (below) are merged in
 // `useAllRealPhotos` so the gallery and PDF stay in sync without duplicate code.
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { FLEET, type EquipmentCategory } from "@/lib/atdb-data";
 
@@ -103,37 +103,64 @@ export type HostedRealPhoto = {
   createdAt: string;
   source: "registry" | "storage";
 };
+export type PhotoLoadState<T> = {
+  photos: T[];
+  loading: boolean;
+  refreshing: boolean;
+  error: string | null;
+  lastUpdated: number | null;
+  refresh: () => void;
+};
 
 const REAL_PHOTO_BUCKET = "equipment-real-photos";
 const IMAGE_FILE_RE = /\.(webp|jpe?g|png)$/i;
 
-async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
+async function discoverHostedStoragePhotos(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
   const folder = equipmentId.toUpperCase();
   const { data, error } = await supabase.storage.from(REAL_PHOTO_BUCKET).list(folder, {
     limit: 100,
     sortBy: { column: "name", order: "asc" },
   });
-  if (error || !data) return [];
-  return data
-    .filter((item) => item.name && IMAGE_FILE_RE.test(item.name))
-    .map((item) => supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(`${folder}/${item.name}`).data.publicUrl);
+  if (error || !data) return { urls: [], error: error?.message ?? "Hosting discovery failed" };
+  return {
+    urls: data
+      .filter((item) => item.name && IMAGE_FILE_RE.test(item.name))
+      .map((item) => supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(`${folder}/${item.name}`).data.publicUrl),
+    error: null,
+  };
 }
 
-export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]> {
-  const storageUrlsPromise = listHostedStoragePhotos(equipmentId);
+async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
+  return (await discoverHostedStoragePhotos(equipmentId)).urls;
+}
+
+async function fetchRuntimePhotosState(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
+  const storageDiscoveryPromise = discoverHostedStoragePhotos(equipmentId);
   const { data, error } = await supabase
     .from("real_photos")
     .select("public_url, sort_index, created_at")
     .eq("equipment_id", equipmentId.toUpperCase())
     .order("sort_index", { ascending: true })
     .order("created_at", { ascending: true });
-  const storageUrls = await storageUrlsPromise;
+  const storageDiscovery = await storageDiscoveryPromise;
   const registryUrls = error || !data ? [] : data.map((r) => r.public_url);
   const seen = new Set<string>();
-  return [...registryUrls, ...storageUrls].filter((url) => (seen.has(url) ? false : (seen.add(url), true)));
+  const urls = [...registryUrls, ...storageDiscovery.urls].filter((url) => (seen.has(url) ? false : (seen.add(url), true)));
+  return {
+    urls,
+    error: error?.message ?? storageDiscovery.error,
+  };
+}
+
+export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]> {
+  return (await fetchRuntimePhotosState(equipmentId)).urls;
 }
 
 export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
+  return (await fetchAllHostedRealPhotosState()).photos;
+}
+
+async function fetchAllHostedRealPhotosState(): Promise<{ photos: HostedRealPhoto[]; error: string | null }> {
   const [registryResult, storageResults] = await Promise.all([
     supabase
       .from("real_photos")
@@ -141,12 +168,13 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
       .order("sort_index", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(200),
-    Promise.allSettled(FLEET.map((eq) => listHostedStoragePhotos(eq.id).then((urls) => ({ eq, urls })))),
+    Promise.allSettled(FLEET.map((eq) => discoverHostedStoragePhotos(eq.id).then((discovery) => ({ eq, discovery })))),
   ]);
 
   const byId = new Map(FLEET.map((eq) => [eq.id.toUpperCase(), eq]));
   const seen = new Set<string>();
   const photos: HostedRealPhoto[] = [];
+  let discoveryError = registryResult.error?.message ?? null;
 
   if (!registryResult.error && registryResult.data) {
     for (const row of registryResult.data) {
@@ -166,9 +194,13 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
   }
 
   for (const result of storageResults) {
-    if (result.status !== "fulfilled") continue;
-    const { eq, urls } = result.value;
-    for (const url of urls) {
+    if (result.status !== "fulfilled") {
+      discoveryError ??= "Hosting discovery failed";
+      continue;
+    }
+    const { eq, discovery } = result.value;
+    discoveryError ??= discovery.error;
+    for (const url of discovery.urls) {
       if (seen.has(url)) continue;
       seen.add(url);
       const stamp = Number(url.match(/\/(\d{10,})-/)?.[1] ?? 0);
@@ -184,12 +216,13 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
     }
   }
 
-  return photos.sort((a, b) => {
+  photos.sort((a, b) => {
     if (a.sort !== b.sort) return b.sort - a.sort;
     if (a.createdAt !== b.createdAt) return b.createdAt.localeCompare(a.createdAt);
     if (a.equipmentId !== b.equipmentId) return a.equipmentId.localeCompare(b.equipmentId);
     return a.url.localeCompare(b.url);
   });
+  return { photos, error: discoveryError };
 }
 
 /**
@@ -197,31 +230,75 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
  * for an equipment ID. Re-fetches when `bumpKey` changes (use after upload).
  */
 export function useAllRealPhotos(equipmentId: string, bumpKey: number = 0): string[] {
-  const buildTime = getRealPhotos(equipmentId);
-  const [runtime, setRuntime] = useState<string[]>([]);
-  useEffect(() => {
-    let alive = true;
-    fetchRuntimePhotos(equipmentId).then((urls) => {
-      if (alive) setRuntime(urls);
-    });
-    return () => {
-      alive = false;
-    };
-  }, [equipmentId, bumpKey]);
-  // De-duplicate by URL while preserving order (build-time first, then uploads).
-  const seen = new Set<string>();
-  return [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+  return useAllRealPhotosState(equipmentId, bumpKey).photos;
 }
 
-export function useHostedRealPhotoFeed(pollMs: number = 15000): HostedRealPhoto[] {
-  const [photos, setPhotos] = useState<HostedRealPhoto[]>([]);
-  useEffect(() => {
-    let alive = true;
-    const refresh = () => {
-      fetchAllHostedRealPhotos().then((next) => {
-        if (alive) setPhotos(next);
+export function useAllRealPhotosState(equipmentId: string, bumpKey: number = 0, pollMs: number = 30000): PhotoLoadState<string> {
+  const buildTime = getRealPhotos(equipmentId);
+  const [runtime, setRuntime] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+
+  const refresh = useCallback(() => {
+    setRefreshing(true);
+    fetchRuntimePhotosState(equipmentId)
+      .then((result) => {
+        setRuntime(result.urls);
+        setError(result.error);
+        setLastUpdated(Date.now());
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : "Photo hosting discovery failed"))
+      .finally(() => {
+        setLoading(false);
+        setRefreshing(false);
       });
+  }, [equipmentId]);
+
+  useEffect(() => {
+    setLoading(true);
+    refresh();
+    const channel = supabase
+      .channel(`detail-real-photos-${equipmentId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "real_photos", filter: `equipment_id=eq.${equipmentId.toUpperCase()}` }, refresh)
+      .subscribe();
+    const timer = window.setInterval(refresh, pollMs);
+    return () => {
+      window.clearInterval(timer);
+      supabase.removeChannel(channel);
     };
+  }, [equipmentId, bumpKey, pollMs, refresh]);
+
+  // De-duplicate by URL while preserving order (build-time first, then uploads).
+  const seen = new Set<string>();
+  const photos = [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+  return { photos, loading, refreshing, error, lastUpdated, refresh };
+}
+
+export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<HostedRealPhoto> {
+  const [photos, setPhotos] = useState<HostedRealPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+
+  const refresh = useCallback(() => {
+    setRefreshing(true);
+    fetchAllHostedRealPhotosState()
+      .then((result) => {
+        setPhotos(result.photos);
+        setError(result.error);
+        setLastUpdated(Date.now());
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : "Photo hosting discovery failed"))
+      .finally(() => {
+        setLoading(false);
+        setRefreshing(false);
+      });
+  }, []);
+
+  useEffect(() => {
     refresh();
     const channel = supabase
       .channel("homepage-real-photo-feed")
@@ -229,10 +306,9 @@ export function useHostedRealPhotoFeed(pollMs: number = 15000): HostedRealPhoto[
       .subscribe();
     const timer = window.setInterval(refresh, pollMs);
     return () => {
-      alive = false;
       window.clearInterval(timer);
       supabase.removeChannel(channel);
     };
-  }, [pollMs]);
-  return photos;
+  }, [pollMs, refresh]);
+  return { photos, loading, refreshing, error, lastUpdated, refresh };
 }

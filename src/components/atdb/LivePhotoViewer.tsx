@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Images, Radio } from "lucide-react";
+import { AlertTriangle, ArrowRight, Images, Loader2, Radio, RefreshCw } from "lucide-react";
 import { CATEGORIES, type EquipmentCategory } from "@/lib/atdb-data";
 import { useHostedRealPhotoFeed, type HostedRealPhoto } from "@/lib/real-photos";
 import { useFontClass } from "@/lib/i18n";
@@ -12,9 +12,27 @@ function categoryLabel(category: EquipmentCategory | "all") {
   return category === "all" ? "All" : CATEGORIES[category].label;
 }
 
+function LivePhotoSkeleton() {
+  return (
+    <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)]">
+      <div className="rounded-md border border-white/12 bg-white/[0.04] p-2 backdrop-blur-md">
+        <div className="aspect-[16/10] animate-pulse rounded-sm bg-white/10" />
+      </div>
+      <div className="rounded-md border border-white/12 bg-white/[0.04] p-3 backdrop-blur-md">
+        <div className="mb-3 h-5 w-32 animate-pulse rounded-sm bg-white/10" />
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="aspect-[4/3] animate-pulse rounded-sm bg-white/10" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function LivePhotoViewer() {
   const fontClass = useFontClass();
-  const photos = useHostedRealPhotoFeed(45000);
+  const { photos, loading, refreshing, error, lastUpdated, refresh } = useHostedRealPhotoFeed(15000);
   const [filter, setFilter] = useState<EquipmentCategory | "all">("all");
   const filtered = useMemo(
     () => (filter === "all" ? photos : photos.filter((photo) => photo.category === filter)),
@@ -47,14 +65,22 @@ export function LivePhotoViewer() {
               Hosted equipment photos appear here automatically with balanced cropping, clean spacing, and responsive viewing.
             </p>
           </div>
-          <div className={`inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-md ${fontClass}`}>
+          <button type="button" onClick={refresh} className={`inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-md transition-colors hover:border-safety/60 hover:text-white ${fontClass}`}>
             <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-safety opacity-70" />
+              <span className={`absolute inline-flex h-full w-full rounded-full bg-safety opacity-70 ${refreshing ? "animate-ping" : ""}`} />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-safety" />
             </span>
-            Auto refresh
-          </div>
+            {refreshing ? "Updating" : lastUpdated ? "Live refresh" : "Auto refresh"}
+            <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+          </button>
         </div>
+
+        {error && (
+          <div className={`mt-5 flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-white ${fontClass}`}>
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+            <span>Photo hosting discovery is temporarily unavailable. Showing available photos.</span>
+          </div>
+        )}
 
         <div className="mt-8 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {FILTERS.map((item) => (
@@ -73,7 +99,9 @@ export function LivePhotoViewer() {
           ))}
         </div>
 
-        {active ? (
+        {loading && !active ? (
+          <LivePhotoSkeleton />
+        ) : active ? (
           <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)]">
             <div className="relative overflow-hidden rounded-md border border-white/12 bg-white/[0.04] p-2 shadow-[0_24px_70px_-32px_oklch(0_0_0/0.8)] backdrop-blur-md">
               <div className="relative aspect-[16/10] overflow-hidden rounded-sm bg-iron">
