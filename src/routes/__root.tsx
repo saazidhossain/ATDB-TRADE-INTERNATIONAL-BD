@@ -34,8 +34,6 @@ export const Route = createRootRoute({
       { title: "ATDB Trade International | Premier Heavy Equipment Rental in Bangladesh" },
       { name: "description", content: "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects." },
       { name: "author", content: "ATDB Trade International" },
-      { name: "creator", content: "Sazid Hossain — A SAZID HOSSAIN ARCHITECTURE" },
-      { name: "designer", content: "Sazid Hossain (behance.net/saazidhossain)" },
       { name: "robots", content: "index,follow,max-image-preview:large,max-snippet:-1" },
       { name: "theme-color", content: "#1a1a1a" },
       { property: "og:type", content: "website" },
@@ -54,7 +52,6 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "canonical", href: "https://www.atdbtrade.com" },
-      { rel: "author", href: "https://www.saazidhossain.com" },
     ],
     scripts: [
       {
@@ -80,19 +77,6 @@ export const Route = createRootRoute({
               url: "https://www.atdbtrade.com",
               name: "ATDB Trade International",
               publisher: { "@id": "https://www.atdbtrade.com/#organization" },
-              creator: {
-                "@type": "Person",
-                name: "Sazid Hossain",
-                alternateName: "@saazidhossain",
-                jobTitle: "Creative Technologist & Web Strategist",
-                url: "https://www.saazidhossain.com",
-                sameAs: [
-                  "https://github.com/saazidhossain",
-                  "https://www.behance.net/saazidhossain",
-                  "https://www.pinterest.com/saazidhossain",
-                  "https://linkedin.com/in/saazidhossain",
-                ],
-              },
             },
           ],
         }),

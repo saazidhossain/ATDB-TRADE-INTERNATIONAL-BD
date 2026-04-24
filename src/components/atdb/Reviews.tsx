@@ -17,7 +17,7 @@ export const SAMPLE_REVIEWS: Review[] = [
     author: "Engr. Rahim Chowdhury",
     company: "MegaBuilders Corp.",
     rating: 5,
-    date: "2025-10-12",
+    date: "2024-03-18",
     content:
       "Equipment delivered on time and in pristine condition. The ATDB team supported us through the entire bridge piling phase — operator discipline was outstanding.",
   },
@@ -26,7 +26,7 @@ export const SAMPLE_REVIEWS: Review[] = [
     author: "Engr. Tariqul Islam",
     company: "National Infrastructure Solutions",
     rating: 5,
-    date: "2025-08-28",
+    date: "2023-11-05",
     content:
       "Maintenance logs were fully up to date — our compliance audit took minutes, not days. Highest tier supplier in the country.",
   },
@@ -35,7 +35,7 @@ export const SAMPLE_REVIEWS: Review[] = [
     author: "Sajjad Hossain",
     company: "Pinnacle Developments",
     rating: 4,
-    date: "2025-06-05",
+    date: "2024-07-22",
     content:
       "Reliable machinery and a WhatsApp response team that handles shift changes within minutes. Will rent from ATDB again.",
   },

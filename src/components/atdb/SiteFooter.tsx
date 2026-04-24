@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { MapPin, Phone, Mail, Facebook, MessageCircle, Sparkles } from "lucide-react";
+import { MapPin, Phone, Mail, Facebook, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import logo from "@/assets/brand/atdb-logo-dark.webp";
 import { COMPANY, buildWhatsappGenericLink } from "@/lib/atdb-data";
 import { useI18n, useFontClass } from "@/lib/i18n";
@@ -115,48 +114,10 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Premium Designer Credit Section */}
-      <div className="relative border-t border-white/10 md:pr-56 lg:pr-0">
-        <div className="container-page flex flex-col-reverse items-center justify-center gap-5 py-7 text-center md:flex-row md:flex-wrap md:justify-between md:gap-x-6 md:gap-y-4 md:text-left lg:pr-56 xl:pr-0">
-          {/* Designer Credit — Premium Branding */}
-          <motion.div
-            className="group relative flex items-center gap-3"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          >
-            <div className="relative">
-              {/* Animated glow backdrop */}
-              <div className="pointer-events-none absolute -inset-2 rounded-full bg-gradient-to-r from-bronze-glow/40 via-safety/20 to-bronze-glow/40 opacity-0 blur-lg transition-opacity duration-500 group-hover:opacity-100" />
-              
-              {/* Glass container with premium styling */}
-              <a
-                href="https://behance.net/saazidhossain"
-                target="_blank"
-                rel="noopener noreferrer author"
-                className="relative inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/8 px-5 py-2.5 backdrop-blur-md transition-all duration-300 hover:border-bronze-glow/60 hover:bg-white/12 hover:shadow-[0_8px_24px_rgba(212,162,77,0.2)]"
-                title="Sazid Hossain — Architect & Designer · Award-Winning Portfolio"
-              >
-                {/* Shimmer effect */}
-                <span className="pointer-events-none absolute inset-0 -translate-x-full rounded-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                
-                {/* Sparkle icon */}
-                <span className="relative">
-                  <Sparkles className="h-3.5 w-3.5 text-bronze-glow transition-transform duration-300 group-hover:rotate-12" />
-                </span>
-                
-                {/* Text content */}
-                <span className="relative flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-bronze-glow to-safety" />
-                  <span className={`text-xs font-bold uppercase tracking-[0.2em] bg-gradient-to-r from-bronze-glow via-safety to-bronze-glow bg-clip-text text-transparent transition-all duration-300 group-hover:scale-105 ${fontClass}`}>
-                    {t("footer.credit")}
-                  </span>
-                </span>
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Copyright */}
-          <p className={`text-xs text-white/50 transition-colors duration-300 ${fontClass}`}>
+      {/* Bottom bar — copyright only */}
+      <div className="relative border-t border-white/10">
+        <div className="container-page flex items-center justify-center py-5">
+          <p className={`text-xs text-white/50 ${fontClass}`}>
             © {year ?? "—"} <span className="font-semibold text-white/70">{COMPANY.name}</span>. {t("footer.rights")}
           </p>
         </div>
