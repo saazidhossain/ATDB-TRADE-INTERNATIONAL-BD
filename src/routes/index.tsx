@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/atdb/Layout";
 import { EquipmentCard } from "@/components/atdb/EquipmentCard";
 import { WhatsappButton } from "@/components/atdb/WhatsappButton";
+import { LivePhotoViewer } from "@/components/atdb/LivePhotoViewer";
 import {
   CATEGORIES,
   COMPANY,
@@ -237,6 +238,8 @@ function Index() {
           </motion.div>
         </div>
       </section>
+
+      <LivePhotoViewer />
 
       {/* WHY ATDB */}
       <section className="bg-background py-20 md:py-28">

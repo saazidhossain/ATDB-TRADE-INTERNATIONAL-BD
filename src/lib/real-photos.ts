@@ -91,18 +91,105 @@ export function hasRealPhoto(equipmentId: string): boolean {
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { FLEET, type EquipmentCategory } from "@/lib/atdb-data";
 
 export type RuntimePhoto = { url: string; sort: number; createdAt: string };
+export type HostedRealPhoto = {
+  equipmentId: string;
+  equipmentName: string;
+  category: EquipmentCategory;
+  url: string;
+  sort: number;
+  createdAt: string;
+  source: "registry" | "storage";
+};
+
+const REAL_PHOTO_BUCKET = "equipment-real-photos";
+const IMAGE_FILE_RE = /\.(webp|jpe?g|png)$/i;
+
+async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
+  const folder = equipmentId.toUpperCase();
+  const { data, error } = await supabase.storage.from(REAL_PHOTO_BUCKET).list(folder, {
+    limit: 100,
+    sortBy: { column: "name", order: "asc" },
+  });
+  if (error || !data) return [];
+  return data
+    .filter((item) => item.name && IMAGE_FILE_RE.test(item.name))
+    .map((item) => supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(`${folder}/${item.name}`).data.publicUrl);
+}
 
 export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]> {
+  const storageUrlsPromise = listHostedStoragePhotos(equipmentId);
   const { data, error } = await supabase
     .from("real_photos")
     .select("public_url, sort_index, created_at")
     .eq("equipment_id", equipmentId.toUpperCase())
     .order("sort_index", { ascending: true })
     .order("created_at", { ascending: true });
-  if (error || !data) return [];
-  return data.map((r) => r.public_url);
+  const storageUrls = await storageUrlsPromise;
+  const registryUrls = error || !data ? [] : data.map((r) => r.public_url);
+  const seen = new Set<string>();
+  return [...registryUrls, ...storageUrls].filter((url) => (seen.has(url) ? false : (seen.add(url), true)));
+}
+
+export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
+  const [registryResult, storageResults] = await Promise.all([
+    supabase
+      .from("real_photos")
+      .select("equipment_id, public_url, sort_index, created_at")
+      .order("sort_index", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(200),
+    Promise.allSettled(FLEET.map((eq) => listHostedStoragePhotos(eq.id).then((urls) => ({ eq, urls })))),
+  ]);
+
+  const byId = new Map(FLEET.map((eq) => [eq.id.toUpperCase(), eq]));
+  const seen = new Set<string>();
+  const photos: HostedRealPhoto[] = [];
+
+  if (!registryResult.error && registryResult.data) {
+    for (const row of registryResult.data) {
+      const eq = byId.get(row.equipment_id.toUpperCase());
+      if (!eq || seen.has(row.public_url)) continue;
+      seen.add(row.public_url);
+      photos.push({
+        equipmentId: eq.id,
+        equipmentName: eq.name,
+        category: eq.category,
+        url: row.public_url,
+        sort: row.sort_index,
+        createdAt: row.created_at,
+        source: "registry",
+      });
+    }
+  }
+
+  for (const result of storageResults) {
+    if (result.status !== "fulfilled") continue;
+    const { eq, urls } = result.value;
+    for (const url of urls) {
+      if (seen.has(url)) continue;
+      seen.add(url);
+      const stamp = Number(url.match(/\/(\d{10,})-/)?.[1] ?? 0);
+      photos.push({
+        equipmentId: eq.id,
+        equipmentName: eq.name,
+        category: eq.category,
+        url,
+        sort: stamp,
+        createdAt: stamp ? new Date(stamp).toISOString() : "",
+        source: "storage",
+      });
+    }
+  }
+
+  return photos.sort((a, b) => {
+    if (a.sort !== b.sort) return b.sort - a.sort;
+    if (a.createdAt !== b.createdAt) return b.createdAt.localeCompare(a.createdAt);
+    if (a.equipmentId !== b.equipmentId) return a.equipmentId.localeCompare(b.equipmentId);
+    return a.url.localeCompare(b.url);
+  });
 }
 
 /**
@@ -124,4 +211,28 @@ export function useAllRealPhotos(equipmentId: string, bumpKey: number = 0): stri
   // De-duplicate by URL while preserving order (build-time first, then uploads).
   const seen = new Set<string>();
   return [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+}
+
+export function useHostedRealPhotoFeed(pollMs: number = 15000): HostedRealPhoto[] {
+  const [photos, setPhotos] = useState<HostedRealPhoto[]>([]);
+  useEffect(() => {
+    let alive = true;
+    const refresh = () => {
+      fetchAllHostedRealPhotos().then((next) => {
+        if (alive) setPhotos(next);
+      });
+    };
+    refresh();
+    const channel = supabase
+      .channel("homepage-real-photo-feed")
+      .on("postgres_changes", { event: "*", schema: "public", table: "real_photos" }, refresh)
+      .subscribe();
+    const timer = window.setInterval(refresh, pollMs);
+    return () => {
+      alive = false;
+      window.clearInterval(timer);
+      supabase.removeChannel(channel);
+    };
+  }, [pollMs]);
+  return photos;
 }
