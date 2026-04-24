@@ -33,7 +33,14 @@ function checkRate(ip: string): boolean {
   const now = Date.now();
   const arr = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   if (arr.length >= MAX_PER_WINDOW) { hits.set(ip, arr); return false; }
-  arr.push(now); hits.set(ip, arr); return true;
+  arr.push(now);
+  hits.set(ip, arr);
+  if (hits.size > 500) {
+    for (const [k, v] of hits) {
+      if (v.every((t) => now - t > WINDOW_MS)) hits.delete(k);
+    }
+  }
+  return true;
 }
 
 async function hashIp(ip: string): Promise<string> {
