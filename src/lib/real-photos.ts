@@ -157,6 +157,10 @@ export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]>
 }
 
 export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
+  return (await fetchAllHostedRealPhotosState()).photos;
+}
+
+async function fetchAllHostedRealPhotosState(): Promise<{ photos: HostedRealPhoto[]; error: string | null }> {
   const [registryResult, storageResults] = await Promise.all([
     supabase
       .from("real_photos")
@@ -164,12 +168,13 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
       .order("sort_index", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(200),
-    Promise.allSettled(FLEET.map((eq) => listHostedStoragePhotos(eq.id).then((urls) => ({ eq, urls })))),
+    Promise.allSettled(FLEET.map((eq) => discoverHostedStoragePhotos(eq.id).then((discovery) => ({ eq, discovery })))),
   ]);
 
   const byId = new Map(FLEET.map((eq) => [eq.id.toUpperCase(), eq]));
   const seen = new Set<string>();
   const photos: HostedRealPhoto[] = [];
+  let discoveryError = registryResult.error?.message ?? null;
 
   if (!registryResult.error && registryResult.data) {
     for (const row of registryResult.data) {
@@ -189,9 +194,13 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
   }
 
   for (const result of storageResults) {
-    if (result.status !== "fulfilled") continue;
-    const { eq, urls } = result.value;
-    for (const url of urls) {
+    if (result.status !== "fulfilled") {
+      discoveryError ??= "Hosting discovery failed";
+      continue;
+    }
+    const { eq, discovery } = result.value;
+    discoveryError ??= discovery.error;
+    for (const url of discovery.urls) {
       if (seen.has(url)) continue;
       seen.add(url);
       const stamp = Number(url.match(/\/(\d{10,})-/)?.[1] ?? 0);
@@ -207,12 +216,13 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
     }
   }
 
-  return photos.sort((a, b) => {
+  photos.sort((a, b) => {
     if (a.sort !== b.sort) return b.sort - a.sort;
     if (a.createdAt !== b.createdAt) return b.createdAt.localeCompare(a.createdAt);
     if (a.equipmentId !== b.equipmentId) return a.equipmentId.localeCompare(b.equipmentId);
     return a.url.localeCompare(b.url);
   });
+  return { photos, error: discoveryError };
 }
 
 /**
