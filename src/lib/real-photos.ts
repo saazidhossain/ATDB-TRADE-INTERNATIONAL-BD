@@ -230,31 +230,75 @@ async function fetchAllHostedRealPhotosState(): Promise<{ photos: HostedRealPhot
  * for an equipment ID. Re-fetches when `bumpKey` changes (use after upload).
  */
 export function useAllRealPhotos(equipmentId: string, bumpKey: number = 0): string[] {
-  const buildTime = getRealPhotos(equipmentId);
-  const [runtime, setRuntime] = useState<string[]>([]);
-  useEffect(() => {
-    let alive = true;
-    fetchRuntimePhotos(equipmentId).then((urls) => {
-      if (alive) setRuntime(urls);
-    });
-    return () => {
-      alive = false;
-    };
-  }, [equipmentId, bumpKey]);
-  // De-duplicate by URL while preserving order (build-time first, then uploads).
-  const seen = new Set<string>();
-  return [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+  return useAllRealPhotosState(equipmentId, bumpKey).photos;
 }
 
-export function useHostedRealPhotoFeed(pollMs: number = 15000): HostedRealPhoto[] {
-  const [photos, setPhotos] = useState<HostedRealPhoto[]>([]);
-  useEffect(() => {
-    let alive = true;
-    const refresh = () => {
-      fetchAllHostedRealPhotos().then((next) => {
-        if (alive) setPhotos(next);
+export function useAllRealPhotosState(equipmentId: string, bumpKey: number = 0, pollMs: number = 30000): PhotoLoadState<string> {
+  const buildTime = getRealPhotos(equipmentId);
+  const [runtime, setRuntime] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+
+  const refresh = useCallback(() => {
+    setRefreshing(true);
+    fetchRuntimePhotosState(equipmentId)
+      .then((result) => {
+        setRuntime(result.urls);
+        setError(result.error);
+        setLastUpdated(Date.now());
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : "Photo hosting discovery failed"))
+      .finally(() => {
+        setLoading(false);
+        setRefreshing(false);
       });
+  }, [equipmentId]);
+
+  useEffect(() => {
+    setLoading(true);
+    refresh();
+    const channel = supabase
+      .channel(`detail-real-photos-${equipmentId}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "real_photos", filter: `equipment_id=eq.${equipmentId.toUpperCase()}` }, refresh)
+      .subscribe();
+    const timer = window.setInterval(refresh, pollMs);
+    return () => {
+      window.clearInterval(timer);
+      supabase.removeChannel(channel);
     };
+  }, [equipmentId, bumpKey, pollMs, refresh]);
+
+  // De-duplicate by URL while preserving order (build-time first, then uploads).
+  const seen = new Set<string>();
+  const photos = [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+  return { photos, loading, refreshing, error, lastUpdated, refresh };
+}
+
+export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<HostedRealPhoto> {
+  const [photos, setPhotos] = useState<HostedRealPhoto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<number | null>(null);
+
+  const refresh = useCallback(() => {
+    setRefreshing(true);
+    fetchAllHostedRealPhotosState()
+      .then((result) => {
+        setPhotos(result.photos);
+        setError(result.error);
+        setLastUpdated(Date.now());
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : "Photo hosting discovery failed"))
+      .finally(() => {
+        setLoading(false);
+        setRefreshing(false);
+      });
+  }, []);
+
+  useEffect(() => {
     refresh();
     const channel = supabase
       .channel("homepage-real-photo-feed")
@@ -262,10 +306,9 @@ export function useHostedRealPhotoFeed(pollMs: number = 15000): HostedRealPhoto[
       .subscribe();
     const timer = window.setInterval(refresh, pollMs);
     return () => {
-      alive = false;
       window.clearInterval(timer);
       supabase.removeChannel(channel);
     };
-  }, [pollMs]);
-  return photos;
+  }, [pollMs, refresh]);
+  return { photos, loading, refreshing, error, lastUpdated, refresh };
 }
