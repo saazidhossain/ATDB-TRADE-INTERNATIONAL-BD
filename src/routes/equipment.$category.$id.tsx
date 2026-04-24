@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, ShieldCheck, BadgeCheck, MapPin, Calendar, Plus, Check, FileDown, Loader2 } from "lucide-react";
+import { AlertTriangle, ChevronRight, ShieldCheck, BadgeCheck, MapPin, Calendar, Plus, Check, FileDown, Loader2, RefreshCw } from "lucide-react";
 import { Layout } from "@/components/atdb/Layout";
 import { EquipmentCard, equipmentGridVariants } from "@/components/atdb/EquipmentCard";
 import { SpecGroupsAccordion } from "@/components/atdb/SpecGroups";
@@ -21,7 +21,7 @@ import {
 import { useI18n, useFontClass } from "@/lib/i18n";
 import { useCart } from "@/lib/cart";
 import { generateSpecSheet } from "@/lib/spec-sheet";
-import { useAllRealPhotos, fetchRuntimePhotos } from "@/lib/real-photos";
+import { useAllRealPhotosState, fetchRuntimePhotos } from "@/lib/real-photos";
 import detailHero from "@/assets/eq-detail-crane.webp";
 import detailCabin from "@/assets/eq-detail-cabin.webp";
 import detailFleet from "@/assets/eq-detail-fleet.webp";
@@ -127,7 +127,8 @@ function EquipmentDetailPage() {
   const related = FLEET.filter((f) => f.category === eq.category && f.id !== eq.id).slice(0, 3);
   // Build gallery slots with captions. The third "extra" image is "cabin" for cranes, "site" otherwise.
   const thirdCaption: GallerySlot["captionKey"] = eq.category === "cranes" ? "gallery.cap.cabin" : "gallery.cap.site";
-  const realPhotos = useAllRealPhotos(eq.id);
+  const realPhotoState = useAllRealPhotosState(eq.id);
+  const realPhotos = realPhotoState.photos;
   const realSlots: GallerySlot[] = realPhotos.map((src) => ({ src, captionKey: "gallery.cap.real" }));
 
   const baseSlots: GallerySlot[] = eq.gallery && eq.gallery.length >= 3
@@ -198,6 +199,7 @@ function EquipmentDetailPage() {
           {/* Gallery */}
           <div>
             <EquipmentGallery slots={gallerySlots} alt={eq.name} certifiedLabel={t("detail.certified")} />
+            <RealPhotoStatus state={realPhotoState} fontClass={fontClass} />
           </div>
 
           {/* Info */}
