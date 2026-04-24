@@ -180,14 +180,14 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
                         value={editCaption}
                         onChange={(e) => setEditCaption(e.target.value)}
                         placeholder="Caption"
-                        maxLength={200}
+                        maxLength={300}
                         className={`w-full rounded-sm border border-border bg-background px-2 py-1 text-xs text-iron focus:border-safety focus:outline-none ${fontClass}`}
                       />
                       <textarea
                         value={editNotes}
                         onChange={(e) => setEditNotes(e.target.value)}
                         placeholder="Condition notes"
-                        maxLength={500}
+                        maxLength={1000}
                         rows={2}
                         className={`w-full resize-none rounded-sm border border-border bg-background px-2 py-1 text-xs text-iron focus:border-safety focus:outline-none ${fontClass}`}
                       />

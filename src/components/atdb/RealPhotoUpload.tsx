@@ -219,7 +219,7 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
                 placeholder={t("realPhoto.meta.caption")}
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                maxLength={200}
+                maxLength={300}
                 className={`w-full rounded-sm border border-border bg-background pl-8 pr-3 py-2 text-sm text-iron placeholder:text-muted-foreground focus:border-safety focus:outline-none focus:ring-1 focus:ring-safety ${fontClass}`}
               />
             </div>
@@ -229,7 +229,7 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
                 placeholder={t("realPhoto.meta.conditionNotes")}
                 value={conditionNotes}
                 onChange={(e) => setConditionNotes(e.target.value)}
-                maxLength={500}
+                maxLength={1000}
                 rows={2}
                 className={`w-full resize-none rounded-sm border border-border bg-background pl-8 pr-3 py-2 text-sm text-iron placeholder:text-muted-foreground focus:border-safety focus:outline-none focus:ring-1 focus:ring-safety ${fontClass}`}
               />
