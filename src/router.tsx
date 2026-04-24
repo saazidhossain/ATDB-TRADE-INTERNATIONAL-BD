@@ -9,7 +9,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
       <div className="max-w-md text-center">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="https://www.w3.org/2000/svg"
             className="h-8 w-8 text-destructive"
             fill="none"
             viewBox="0 0 24 24"
