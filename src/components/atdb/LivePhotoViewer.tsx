@@ -12,6 +12,24 @@ function categoryLabel(category: EquipmentCategory | "all") {
   return category === "all" ? "All" : CATEGORIES[category].label;
 }
 
+function LivePhotoSkeleton() {
+  return (
+    <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)]">
+      <div className="rounded-md border border-white/12 bg-white/[0.04] p-2 backdrop-blur-md">
+        <div className="aspect-[16/10] animate-pulse rounded-sm bg-white/10" />
+      </div>
+      <div className="rounded-md border border-white/12 bg-white/[0.04] p-3 backdrop-blur-md">
+        <div className="mb-3 h-5 w-32 animate-pulse rounded-sm bg-white/10" />
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="aspect-[4/3] animate-pulse rounded-sm bg-white/10" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function LivePhotoViewer() {
   const fontClass = useFontClass();
   const { photos, loading, refreshing, error, lastUpdated, refresh } = useHostedRealPhotoFeed(15000);
