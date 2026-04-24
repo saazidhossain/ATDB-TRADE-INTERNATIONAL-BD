@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - Page Not Found | ATDB Trade International</title>
+  <meta name="description" content="The page you're looking for doesn't exist. Return to ATDB Trade International homepage." />
+  <meta name="robots" content="noindex, follow" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #0a1628 0%, #1a2332 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 600px;
+      animation: fadeIn 0.6s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-code {
+      font-size: 120px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #c9a84c 0%, #e8c547 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 16px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 28px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #c9a84c 0%, #e8c547 100%);
+      color: #0a1628;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .suggestions {
+      text-align: left;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 24px;
+      margin-top: 40px;
+    }
+
+    .suggestions h3 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #c9a84c;
+      margin-bottom: 16px;
+    }
+
+    .suggestions ul {
+      list-style: none;
+    }
+
+    .suggestions li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .suggestions a {
+      color: #c9a84c;
+      text-decoration: none;
+      display: inline;
+      padding: 0;
+      border-radius: 0;
+      font-weight: 600;
+    }
+
+    .suggestions a:hover {
+      text-decoration: underline;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .logo {
+      margin-bottom: 40px;
+      opacity: 0.8;
+    }
+
+    .logo img {
+      height: 40px;
+      width: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#c9a84c">ATDB</text>
+      </svg>
+    </div>
+
+    <div class="error-code">404</div>
+    <h1>Page Not Found</h1>
+    <p>The page you're looking for doesn't exist or has been moved. Let's get you back on track.</p>
+
+    <div class="button-group">
+      <a href="/" class="btn-primary">← Go Home</a>
+      <a href="/equipment" class="btn-secondary">Browse Equipment</a>
+    </div>
+
+    <div class="suggestions">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="/">Homepage</a></li>
+        <li><a href="/equipment">Equipment Fleet</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Analytics tracking for 404 errors
+    if (window.gtag) {
+      gtag('event', 'page_view', {
+        page_path: '/404.html',
+        page_title: '404 - Page Not Found'
+      });
+    }
+  </script>
+</body>
+</html>
