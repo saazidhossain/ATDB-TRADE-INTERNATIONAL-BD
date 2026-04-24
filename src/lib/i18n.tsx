@@ -525,6 +525,11 @@ export const TRANSLATIONS: Dict = {
   "realPhoto.upload.cta": { en: "Choose photo", bn: "ছবি বাছুন" },
   "realPhoto.upload.uploading": { en: "Uploading…", bn: "আপলোড হচ্ছে…" },
   "realPhoto.upload.success": { en: "Added to gallery & PDF", bn: "গ্যালারি ও PDF-এ যোগ হয়েছে" },
+  "realPhoto.meta.uploader": { en: "Your name (optional)", bn: "আপনার নাম (ঐচ্ছিক)" },
+  "realPhoto.meta.caption": { en: "Caption (optional)", bn: "ক্যাপশন (ঐচ্ছিক)" },
+  "realPhoto.meta.conditionNotes": { en: "Condition notes (optional)", bn: "অবস্থার নোট (ঐচ্ছিক)" },
+  "realPhoto.upload.another": { en: "Upload another photo", bn: "আরেকটি ছবি আপলোড করুন" },
+  "common.cancel": { en: "Cancel", bn: "বাতিল করুন" },
 
   // ─── Real photo status bar ─────────────────────────────────────
   "realPhoto.status.error": { en: "Live photo sync unavailable. Showing gallery images.", bn: "লাইভ ফটো সিঙ্ক অনুপলব্ধ। গ্যালারি ছবি দেখানো হচ্ছে।" },
