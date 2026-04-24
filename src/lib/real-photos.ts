@@ -89,7 +89,7 @@ export function hasRealPhoto(equipmentId: string): boolean {
 // Build-time photos (above) + Cloud-uploaded photos (below) are merged in
 // `useAllRealPhotos` so the gallery and PDF stay in sync without duplicate code.
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { FLEET, type EquipmentCategory } from "@/lib/atdb-data";
 
@@ -103,34 +103,57 @@ export type HostedRealPhoto = {
   createdAt: string;
   source: "registry" | "storage";
 };
+export type PhotoLoadState<T> = {
+  photos: T[];
+  loading: boolean;
+  refreshing: boolean;
+  error: string | null;
+  lastUpdated: number | null;
+  refresh: () => void;
+};
 
 const REAL_PHOTO_BUCKET = "equipment-real-photos";
 const IMAGE_FILE_RE = /\.(webp|jpe?g|png)$/i;
 
-async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
+async function discoverHostedStoragePhotos(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
   const folder = equipmentId.toUpperCase();
   const { data, error } = await supabase.storage.from(REAL_PHOTO_BUCKET).list(folder, {
     limit: 100,
     sortBy: { column: "name", order: "asc" },
   });
-  if (error || !data) return [];
-  return data
-    .filter((item) => item.name && IMAGE_FILE_RE.test(item.name))
-    .map((item) => supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(`${folder}/${item.name}`).data.publicUrl);
+  if (error || !data) return { urls: [], error: error?.message ?? "Hosting discovery failed" };
+  return {
+    urls: data
+      .filter((item) => item.name && IMAGE_FILE_RE.test(item.name))
+      .map((item) => supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(`${folder}/${item.name}`).data.publicUrl),
+    error: null,
+  };
 }
 
-export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]> {
-  const storageUrlsPromise = listHostedStoragePhotos(equipmentId);
+async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
+  return (await discoverHostedStoragePhotos(equipmentId)).urls;
+}
+
+async function fetchRuntimePhotosState(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
+  const storageDiscoveryPromise = discoverHostedStoragePhotos(equipmentId);
   const { data, error } = await supabase
     .from("real_photos")
     .select("public_url, sort_index, created_at")
     .eq("equipment_id", equipmentId.toUpperCase())
     .order("sort_index", { ascending: true })
     .order("created_at", { ascending: true });
-  const storageUrls = await storageUrlsPromise;
+  const storageDiscovery = await storageDiscoveryPromise;
   const registryUrls = error || !data ? [] : data.map((r) => r.public_url);
   const seen = new Set<string>();
-  return [...registryUrls, ...storageUrls].filter((url) => (seen.has(url) ? false : (seen.add(url), true)));
+  const urls = [...registryUrls, ...storageDiscovery.urls].filter((url) => (seen.has(url) ? false : (seen.add(url), true)));
+  return {
+    urls,
+    error: error?.message ?? storageDiscovery.error,
+  };
+}
+
+export async function fetchRuntimePhotos(equipmentId: string): Promise<string[]> {
+  return (await fetchRuntimePhotosState(equipmentId)).urls;
 }
 
 export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
