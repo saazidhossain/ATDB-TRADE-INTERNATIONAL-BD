@@ -198,7 +198,12 @@ function EquipmentDetailPage() {
         <div className="container-page grid gap-10 lg:grid-cols-[1.2fr_1fr]">
           {/* Gallery */}
           <div>
-            <EquipmentGallery slots={gallerySlots} alt={eq.name} certifiedLabel={t("detail.certified")} />
+            <EquipmentGallery 
+              slots={gallerySlots} 
+              alt={eq.name} 
+              certifiedLabel={t("detail.certified")} 
+              loading={realPhotoState.loading}
+            />
             <RealPhotoStatus state={realPhotoState} fontClass={fontClass} />
           </div>
 

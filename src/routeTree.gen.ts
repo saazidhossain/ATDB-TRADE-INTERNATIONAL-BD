@@ -16,6 +16,8 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EquipmentIndexRouteImport } from './routes/equipment.index'
+import { Route as ApiQuotesRouteImport } from './routes/api.quotes'
+import { Route as ApiPhotosRouteImport } from './routes/api.photos'
 import { Route as ApiContactRouteImport } from './routes/api.contact'
 import { Route as EquipmentCategoryIndexRouteImport } from './routes/equipment.$category.index'
 import { Route as EquipmentCategoryIdRouteImport } from './routes/equipment.$category.$id'
@@ -55,6 +57,16 @@ const EquipmentIndexRoute = EquipmentIndexRouteImport.update({
   path: '/equipment/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiQuotesRoute = ApiQuotesRouteImport.update({
+  id: '/api/quotes',
+  path: '/api/quotes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPhotosRoute = ApiPhotosRouteImport.update({
+  id: '/api/photos',
+  path: '/api/photos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiContactRoute = ApiContactRouteImport.update({
   id: '/api/contact',
   path: '/api/contact',
@@ -79,6 +91,8 @@ export interface FileRoutesByFullPath {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/contact': typeof ApiContactRoute
+  '/api/photos': typeof ApiPhotosRoute
+  '/api/quotes': typeof ApiQuotesRoute
   '/equipment/': typeof EquipmentIndexRoute
   '/equipment/$category/$id': typeof EquipmentCategoryIdRoute
   '/equipment/$category/': typeof EquipmentCategoryIndexRoute
@@ -91,6 +105,8 @@ export interface FileRoutesByTo {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/contact': typeof ApiContactRoute
+  '/api/photos': typeof ApiPhotosRoute
+  '/api/quotes': typeof ApiQuotesRoute
   '/equipment': typeof EquipmentIndexRoute
   '/equipment/$category/$id': typeof EquipmentCategoryIdRoute
   '/equipment/$category': typeof EquipmentCategoryIndexRoute
@@ -104,6 +120,8 @@ export interface FileRoutesById {
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/contact': typeof ApiContactRoute
+  '/api/photos': typeof ApiPhotosRoute
+  '/api/quotes': typeof ApiQuotesRoute
   '/equipment/': typeof EquipmentIndexRoute
   '/equipment/$category/$id': typeof EquipmentCategoryIdRoute
   '/equipment/$category/': typeof EquipmentCategoryIndexRoute
@@ -118,6 +136,8 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/api/contact'
+    | '/api/photos'
+    | '/api/quotes'
     | '/equipment/'
     | '/equipment/$category/$id'
     | '/equipment/$category/'
@@ -130,6 +150,8 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/api/contact'
+    | '/api/photos'
+    | '/api/quotes'
     | '/equipment'
     | '/equipment/$category/$id'
     | '/equipment/$category'
@@ -142,6 +164,8 @@ export interface FileRouteTypes {
     | '/robots.txt'
     | '/sitemap.xml'
     | '/api/contact'
+    | '/api/photos'
+    | '/api/quotes'
     | '/equipment/'
     | '/equipment/$category/$id'
     | '/equipment/$category/'
@@ -155,6 +179,8 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiContactRoute: typeof ApiContactRoute
+  ApiPhotosRoute: typeof ApiPhotosRoute
+  ApiQuotesRoute: typeof ApiQuotesRoute
   EquipmentIndexRoute: typeof EquipmentIndexRoute
   EquipmentCategoryIdRoute: typeof EquipmentCategoryIdRoute
   EquipmentCategoryIndexRoute: typeof EquipmentCategoryIndexRoute
@@ -211,6 +237,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EquipmentIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/quotes': {
+      id: '/api/quotes'
+      path: '/api/quotes'
+      fullPath: '/api/quotes'
+      preLoaderRoute: typeof ApiQuotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/photos': {
+      id: '/api/photos'
+      path: '/api/photos'
+      fullPath: '/api/photos'
+      preLoaderRoute: typeof ApiPhotosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/contact': {
       id: '/api/contact'
       path: '/api/contact'
@@ -243,6 +283,8 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiContactRoute: ApiContactRoute,
+  ApiPhotosRoute: ApiPhotosRoute,
+  ApiQuotesRoute: ApiQuotesRoute,
   EquipmentIndexRoute: EquipmentIndexRoute,
   EquipmentCategoryIdRoute: EquipmentCategoryIdRoute,
   EquipmentCategoryIndexRoute: EquipmentCategoryIndexRoute,

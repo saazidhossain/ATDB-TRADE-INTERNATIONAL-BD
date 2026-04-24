@@ -3,8 +3,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BadgeCheck, ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
+import { BadgeCheck, ChevronLeft, ChevronRight, Maximize2, X, Loader2 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type GallerySlot = {
   src: string;
@@ -21,15 +22,41 @@ interface Props {
   slots: GallerySlot[];
   alt: string;
   certifiedLabel: string;
+  loading?: boolean;
 }
 
-export function EquipmentGallery({ slots, alt, certifiedLabel }: Props) {
+export function EquipmentGallery({ slots, alt, certifiedLabel, loading }: Props) {
   const { t } = useI18n();
   const [active, setActive] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  const next = useCallback(() => setActive((i) => (i + 1) % slots.length), [slots.length]);
-  const prev = useCallback(() => setActive((i) => (i - 1 + slots.length) % slots.length), [slots.length]);
+  const next = useCallback(() => {
+    setImageLoaded(false);
+    setActive((i) => (i + 1) % slots.length);
+  }, [slots.length]);
+  
+  const prev = useCallback(() => {
+    setImageLoaded(false);
+    setActive((i) => (i - 1 + slots.length) % slots.length);
+  }, [slots.length]);
+
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [active]);
+
+  if (loading || !slots.length) {
+    return (
+      <div className="space-y-3">
+        <Skeleton className="aspect-[4/3] w-full rounded-md" />
+        <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="aspect-[4/3] w-full rounded-sm" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -41,19 +68,29 @@ export function EquipmentGallery({ slots, alt, certifiedLabel }: Props) {
         className="group relative block aspect-[4/3] w-full overflow-hidden rounded-md border border-border bg-muted shadow-card focus:outline-none focus-visible:ring-2 focus-visible:ring-safety"
       >
         <AnimatePresence mode="wait">
-          <motion.img
+          <motion.div
             key={slots[active].src}
-            src={slots[active].src}
-            alt={alt}
-            initial={{ opacity: 0, scale: 1.0 }}
-            animate={{ opacity: 1, scale: 1.08 }}
-            exit={{ opacity: 0, scale: 1.12 }}
-            transition={{
-              opacity: { duration: 0.5, ease: "easeOut" },
-              scale: { duration: 12, ease: "linear" },
-            }}
-            className="absolute inset-0 h-full w-full object-cover will-change-transform"
-          />
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 flex items-center justify-center bg-muted/50 p-4 sm:p-8"
+          >
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-safety/20" />
+              </div>
+            )}
+            <motion.img
+              src={slots[active].src}
+              alt={alt}
+              onLoad={() => setImageLoaded(true)}
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: imageLoaded ? 1 : 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="h-full w-full object-contain will-change-transform"
+            />
+          </motion.div>
         </AnimatePresence>
 
         {/* Certified badge */}
@@ -117,18 +154,19 @@ export function EquipmentGallery({ slots, alt, certifiedLabel }: Props) {
               onClick={() => setActive(i)}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className={`relative block aspect-[4/3] w-full overflow-hidden rounded-sm border-2 transition-colors ${
+              className={`relative block aspect-[4/3] w-full overflow-hidden rounded-sm border-2 transition-all duration-300 ${
                 active === i
-                  ? "border-safety shadow-[0_0_0_3px_color-mix(in_oklab,var(--safety)_20%,transparent)]"
+                  ? "border-safety shadow-[0_0_10px_rgba(var(--safety-rgb),0.3)]"
                   : "border-transparent hover:border-iron/30"
               }`}
               aria-label={`${t("detail.viewImage")}: ${t(slot.captionKey)}`}
               aria-current={active === i}
             >
               <img src={slot.src} alt="" loading="lazy" className="h-full w-full object-cover" />
+              {active === i && <div className="absolute inset-0 bg-safety/10" />}
             </motion.button>
             <p
-              className={`mt-1.5 truncate text-center text-[10px] font-semibold uppercase tracking-[0.12em] ${
+              className={`mt-1.5 truncate text-center text-[10px] font-bold uppercase tracking-[0.12em] ${
                 active === i ? "text-safety" : "text-muted-foreground"
               }`}
             >
@@ -178,6 +216,7 @@ function Lightbox({
   const [index, setIndex] = useState(startIndex);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // Pinch state
   const pinchRef = useRef<{ startDist: number; startZoom: number } | null>(null);
@@ -185,12 +224,14 @@ function Lightbox({
   const lastTapRef = useRef<number>(0);
 
   const next = useCallback(() => {
+    setImageLoaded(false);
     setZoom(1);
     setPan({ x: 0, y: 0 });
     setIndex((i) => (i + 1) % slots.length);
   }, [slots.length]);
 
   const prev = useCallback(() => {
+    setImageLoaded(false);
     setZoom(1);
     setPan({ x: 0, y: 0 });
     setIndex((i) => (i - 1 + slots.length) % slots.length);
@@ -233,8 +274,8 @@ function Lightbox({
     if (e.touches.length === 2 && pinchRef.current) {
       const [a, b] = [e.touches[0], e.touches[1]];
       const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-      const next = Math.min(4, Math.max(1, pinchRef.current.startZoom * (dist / pinchRef.current.startDist)));
-      setZoom(next);
+      const nextZoom = Math.min(4, Math.max(1, pinchRef.current.startZoom * (dist / pinchRef.current.startDist)));
+      setZoom(nextZoom);
     }
   };
 
@@ -263,7 +304,7 @@ function Lightbox({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[100] flex flex-col bg-iron-deep/95 backdrop-blur-md"
+      className="fixed inset-0 z-[100] flex flex-col bg-iron-deep/98 backdrop-blur-xl"
       role="dialog"
       aria-modal="true"
       aria-label={alt}
@@ -273,10 +314,10 @@ function Lightbox({
       }}
     >
       {/* Top bar */}
-      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3 text-white">
+      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-4 text-white">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-sm font-semibold uppercase tracking-wider">{alt}</p>
-          <p className="text-[11px] text-white/60">
+          <p className="truncate font-display text-sm font-bold uppercase tracking-widest">{alt}</p>
+          <p className="text-[11px] font-medium uppercase tracking-wider text-white/50">
             {t(slots[index].captionKey)} · {index + 1} / {slots.length}
           </p>
         </div>
@@ -284,7 +325,7 @@ function Lightbox({
           type="button"
           onClick={() => onClose(index)}
           aria-label={t("gallery.lightbox.close")}
-          className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/5 text-white transition-colors hover:bg-white/15"
+          className="grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:bg-white/15 hover:scale-110"
         >
           <X className="h-5 w-5" />
         </button>
@@ -303,76 +344,74 @@ function Lightbox({
           setZoom((z) => (z > 1 ? 1 : 2.2));
           setPan({ x: 0, y: 0 });
         }}
-        style={{ touchAction: zoom > 1 ? "none" : "pan-y" }}
       >
         <AnimatePresence mode="wait">
-          <motion.img
+          <motion.div
             key={slots[index].src}
-            src={slots[index].src}
-            alt={alt}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            draggable={false}
-            className="absolute inset-0 m-auto h-full w-full object-contain"
-            style={{
-              transform: `scale(${zoom}) translate(${pan.x}px, ${pan.y}px)`,
-              transformOrigin: "center center",
-              transition: pinchRef.current ? "none" : "transform 0.18s ease-out",
-            }}
-          />
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 flex items-center justify-center p-4 sm:p-12"
+          >
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Loader2 className="h-10 w-10 animate-spin text-safety/30" />
+              </div>
+            )}
+            <motion.img
+              src={slots[index].src}
+              alt={alt}
+              onLoad={() => setImageLoaded(true)}
+              style={{
+                scale: zoom,
+                x: pan.x,
+                y: pan.y,
+              }}
+              className="max-h-full max-w-full object-contain shadow-2xl"
+            />
+          </motion.div>
         </AnimatePresence>
 
-        {/* Prev / Next */}
-        {slots.length > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={prev}
-              aria-label={t("gallery.lightbox.prev")}
-              className="absolute left-2 top-1/2 hidden -translate-y-1/2 grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-colors hover:bg-white/15 md:grid"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              aria-label={t("gallery.lightbox.next")}
-              className="absolute right-2 top-1/2 hidden -translate-y-1/2 grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-colors hover:bg-white/15 md:grid"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </>
-        )}
-
-        {/* Mobile zoom hint */}
-        {zoom === 1 && (
-          <p className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80 backdrop-blur-md md:hidden">
-            {t("gallery.lightbox.zoom")}
-          </p>
-        )}
+        {/* Nav buttons */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-4">
+          <button
+            type="button"
+            onClick={prev}
+            className="pointer-events-auto grid h-12 w-12 place-items-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:scale-110"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            type="button"
+            onClick={next}
+            className="pointer-events-auto grid h-12 w-12 place-items-center rounded-full border border-white/10 bg-black/20 text-white backdrop-blur-md transition-all hover:bg-black/40 hover:scale-110"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        </div>
       </div>
 
-      {/* Thumbnail strip */}
-      <div className="flex gap-2 overflow-x-auto border-t border-white/10 bg-iron-deep/60 px-4 py-3">
-        {slots.map((slot, i) => (
-          <button
-            key={slot.src + i}
-            type="button"
-            onClick={() => {
-              setIndex(i);
-              setZoom(1);
-              setPan({ x: 0, y: 0 });
-            }}
-            aria-current={index === i}
-            className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-sm border-2 transition-colors ${
-              index === i ? "border-safety" : "border-white/20 hover:border-white/40"
-            }`}
-          >
-            <img src={slot.src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-          </button>
-        ))}
+      {/* Bottom bar / Thumbnails */}
+      <div className="border-t border-white/10 bg-black/20 p-4 backdrop-blur-md">
+        <div className="mx-auto flex max-w-3xl justify-center gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {slots.map((slot, i) => (
+            <button
+              key={slot.src + i}
+              onClick={() => {
+                setImageLoaded(false);
+                setIndex(i);
+                setZoom(1);
+                setPan({ x: 0, y: 0 });
+              }}
+              className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-sm border-2 transition-all ${
+                index === i ? "border-safety scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"
+              }`}
+            >
+              <img src={slot.src} alt="" className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
       </div>
     </motion.div>
   );
