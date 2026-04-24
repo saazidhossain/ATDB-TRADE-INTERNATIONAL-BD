@@ -69,7 +69,7 @@ export const COMPANY = {
   ],
   email: "saifulaapi@gmail.com",
   // bank intentionally removed from public-facing surfaces
-  facebook: "https://www.facebook.com/share/1HzpUFqjko/",
+  facebook: "https://www.facebook.com/atdbtrade",
   offices: [
     {
       city: "Dhaka",
@@ -120,19 +120,19 @@ export const CATEGORIES: Record<
   EquipmentCategory,
   { slug: EquipmentCategory; label: string; label_bn: string; tagline: string; image: string }
 > = {
-  cranes: {
-    slug: "cranes",
-    label: "Mobile Cranes",
-    label_bn: "ক্রেন বহর",
-    tagline: "7 units · 10T to 120T · Liebherr & Kato",
-    image: imgLiebherr1120,
-  },
   rollers: {
     slug: "rollers",
     label: "Road Rollers",
     label_bn: "রোড রোলার",
     tagline: "9 units · 1T to 12T · Sakai, Dynapac, Bomag",
     image: imgSakai900,
+  },
+  cranes: {
+    slug: "cranes",
+    label: "Mobile Cranes",
+    label_bn: "ক্রেন বহর",
+    tagline: "7 units · 10T to 120T · Liebherr & Kato",
+    image: imgLiebherr1120,
   },
   excavators: {
     slug: "excavators",
