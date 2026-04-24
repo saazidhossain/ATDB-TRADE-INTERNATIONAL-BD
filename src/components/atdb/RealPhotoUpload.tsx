@@ -1,5 +1,5 @@
-// Runtime "Upload real photo" widget — uploads an image to Lovable Cloud
-// Storage, registers it in the `real_photos` table, and notifies the parent
+// Runtime "Upload real photo" widget — uploads an image to Supabase Storage,
+// registers it in the `real_photos` table, and notifies the parent
 // so the gallery and the generated PDF refresh immediately.
 
 import { useRef, useState } from "react";

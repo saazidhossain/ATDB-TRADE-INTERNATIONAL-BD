@@ -231,8 +231,7 @@ export const TRANSLATIONS: Dict = {
   "footer.bank": { en: "Bank", bn: "ব্যাংক" },
   "footer.tagline": { en: "Bangladesh's premier heavy equipment rental partner. Since 2000.", bn: "বাংলাদেশের সেরা হেভি ইকুইপমেন্ট রেন্টাল পার্টনার। ২০০০ সাল থেকে।" },
   "footer.rights": { en: "All rights reserved.", bn: "সর্বস্বত্ব সংরক্ষিত।" },
-  "footer.credit": { en: "A SAZID HOSSAIN ARCHITECTURE", bn: "একটি সাজিদ হোসেন স্থাপত্য" },
-  "footer.creditBy": { en: "By", bn: "দ্বারা" },
+  "footer.legal": { en: "Legal", bn: "আইনি" },
 
   // ─── Cart ────────────────────────────────────────────────────────
   "common.addToQuote": { en: "Add to quote", bn: "কোটেশনে যোগ করুন" },
@@ -526,6 +525,12 @@ export const TRANSLATIONS: Dict = {
   "realPhoto.upload.cta": { en: "Choose photo", bn: "ছবি বাছুন" },
   "realPhoto.upload.uploading": { en: "Uploading…", bn: "আপলোড হচ্ছে…" },
   "realPhoto.upload.success": { en: "Added to gallery & PDF", bn: "গ্যালারি ও PDF-এ যোগ হয়েছে" },
+
+  // ─── Real photo status bar ─────────────────────────────────────
+  "realPhoto.status.error": { en: "Live photo sync unavailable. Showing gallery images.", bn: "লাইভ ফটো সিঙ্ক অনুপলব্ধ। গ্যালারি ছবি দেখানো হচ্ছে।" },
+  "realPhoto.status.retry": { en: "Retry", bn: "আবার চেষ্টা করুন" },
+  "realPhoto.status.synced": { en: "live photos synced", bn: "লাইভ ফটো সিঙ্ক হয়েছে" },
+  "realPhoto.status.refresh": { en: "Refresh", bn: "রিফ্রেশ করুন" },
 };
 
 interface I18nCtx {
