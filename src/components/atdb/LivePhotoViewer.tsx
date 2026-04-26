@@ -386,7 +386,11 @@ export function LivePhotoViewer() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.5 }}
                       transition={{ delay: idx * 0.03, duration: 0.4 }}
-                      onClick={() => setActiveUrl(photo.url)}
+                      onClick={() => {
+                        if (active.url === photo.url) setLightboxOpen(true);
+                        else setActiveUrl(photo.url);
+                      }}
+                      onDoubleClick={() => { setActiveUrl(photo.url); setLightboxOpen(true); }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className={`group relative aspect-[4/3] overflow-hidden rounded-sm border-2 bg-iron/30 transition-all duration-300 ${
