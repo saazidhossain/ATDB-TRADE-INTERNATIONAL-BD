@@ -6,11 +6,67 @@
 //
 // No registration / wiring needed — Vite picks them up at build time.
 
-const modules = import.meta.glob("@/assets/fleet/real/*.{webp,jpg,jpeg,png,WEBP,JPG,JPEG,PNG}", {
+// Broad glob — we accept ALL files in the folder, then validate. This lets us
+// detect and report incomplete downloads (.crdownload, .part), zero-byte files,
+// and unrecognized extensions instead of silently dropping them.
+const allModules = import.meta.glob("@/assets/fleet/real/*", {
   eager: true,
   query: "?url",
   import: "default",
 }) as Record<string, string>;
+
+const VALID_IMAGE_EXT = /\.(webp|jpe?g|png)$/i;
+const INCOMPLETE_DOWNLOAD_EXT = /\.(crdownload|part|partial|download|tmp)$/i;
+
+export type SkippedPhoto = {
+  file: string;
+  path: string;
+  reason: string;
+  category: "incomplete-download" | "unsupported-extension" | "hidden-or-system" | "invalid-name";
+};
+
+const skippedBuildTime: SkippedPhoto[] = [];
+
+const modules: Record<string, string> = {};
+for (const [path, url] of Object.entries(allModules)) {
+  const file = path.split("/").pop() ?? "";
+  if (!file || file.startsWith(".")) {
+    skippedBuildTime.push({ file, path, reason: "Hidden or system file (starts with `.`)", category: "hidden-or-system" });
+    continue;
+  }
+  if (INCOMPLETE_DOWNLOAD_EXT.test(file)) {
+    const ext = file.match(INCOMPLETE_DOWNLOAD_EXT)?.[0] ?? "";
+    skippedBuildTime.push({
+      file,
+      path,
+      reason: `Incomplete download (${ext}) — re-download or remove this file`,
+      category: "incomplete-download",
+    });
+    continue;
+  }
+  if (!VALID_IMAGE_EXT.test(file)) {
+    skippedBuildTime.push({
+      file,
+      path,
+      reason: `Unsupported extension — only .webp .jpg .jpeg .png are loaded`,
+      category: "unsupported-extension",
+    });
+    continue;
+  }
+  modules[path] = url;
+}
+
+if (skippedBuildTime.length && typeof console !== "undefined") {
+  // eslint-disable-next-line no-console
+  console.warn(
+    `[real-photos] Skipped ${skippedBuildTime.length} file(s) in src/assets/fleet/real/:\n` +
+      skippedBuildTime.map((s) => `  • ${s.file} — ${s.reason}`).join("\n"),
+  );
+}
+
+export function getBuildTimeSkipReport(): SkippedPhoto[] {
+  return [...skippedBuildTime];
+}
 
 // Photo-type priority: lower number = earlier in gallery / PDF.
 // Order is intentionally chosen to match how operators typically inspect a unit:
