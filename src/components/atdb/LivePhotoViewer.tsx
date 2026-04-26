@@ -91,6 +91,8 @@ export function LivePhotoViewer() {
   
   const [activeUrl, setActiveUrl] = useState<string | null>(null);
   const active = filtered.find((photo) => photo.url === activeUrl) ?? filtered[0];
+  const activeIndex = active ? filtered.findIndex((p) => p.url === active.url) : -1;
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     if (!filtered.length) {
