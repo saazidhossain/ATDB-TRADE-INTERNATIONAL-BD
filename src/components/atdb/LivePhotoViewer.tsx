@@ -345,7 +345,7 @@ export function LivePhotoViewer() {
                     {active.equipmentName}
                   </motion.h3>
                 </motion.div>
-              </div>
+              </button>
             </motion.div>
 
             {/* Sidebar Gallery with Staggered Thumbnails */}
