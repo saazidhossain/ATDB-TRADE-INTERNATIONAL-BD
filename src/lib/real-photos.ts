@@ -171,6 +171,26 @@ export type PhotoLoadState<T> = {
 const REAL_PHOTO_BUCKET = "equipment-real-photos";
 const IMAGE_FILE_RE = /\.(webp|jpe?g|png)$/i;
 
+const skippedRuntime = new Map<string, SkippedPhoto>();
+
+function recordRuntimeSkip(item: SkippedPhoto) {
+  skippedRuntime.set(item.path, item);
+  if (typeof console !== "undefined") {
+    // eslint-disable-next-line no-console
+    console.warn(`[real-photos] Skipped hosted file: ${item.file} — ${item.reason}`);
+  }
+}
+
+export function getRuntimeSkipReport(): SkippedPhoto[] {
+  return Array.from(skippedRuntime.values());
+}
+
+export function getRealPhotoSkipReport(): { buildTime: SkippedPhoto[]; runtime: SkippedPhoto[]; total: number } {
+  const buildTime = getBuildTimeSkipReport();
+  const runtime = getRuntimeSkipReport();
+  return { buildTime, runtime, total: buildTime.length + runtime.length };
+}
+
 async function discoverHostedStoragePhotos(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
   const folder = equipmentId.toUpperCase();
   const { data, error } = await supabase.storage.from(REAL_PHOTO_BUCKET).list(folder, {
@@ -178,12 +198,36 @@ async function discoverHostedStoragePhotos(equipmentId: string): Promise<{ urls:
     sortBy: { column: "name", order: "asc" },
   });
   if (error || !data) return { urls: [], error: error?.message ?? "Hosting discovery failed" };
-  return {
-    urls: data
-      .filter((item) => item.name && IMAGE_FILE_RE.test(item.name))
-      .map((item) => supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(`${folder}/${item.name}`).data.publicUrl),
-    error: null,
-  };
+  const urls: string[] = [];
+  for (const item of data) {
+    if (!item.name) continue;
+    const path = `${folder}/${item.name}`;
+    if (item.name.startsWith(".")) {
+      recordRuntimeSkip({ file: item.name, path, reason: "Hidden or system file", category: "hidden-or-system" });
+      continue;
+    }
+    if (INCOMPLETE_DOWNLOAD_EXT.test(item.name)) {
+      const ext = item.name.match(INCOMPLETE_DOWNLOAD_EXT)?.[0] ?? "";
+      recordRuntimeSkip({
+        file: item.name,
+        path,
+        reason: `Incomplete download (${ext}) — re-upload the finished file`,
+        category: "incomplete-download",
+      });
+      continue;
+    }
+    if (!IMAGE_FILE_RE.test(item.name)) {
+      recordRuntimeSkip({
+        file: item.name,
+        path,
+        reason: "Unsupported extension — only .webp .jpg .jpeg .png are loaded",
+        category: "unsupported-extension",
+      });
+      continue;
+    }
+    urls.push(supabase.storage.from(REAL_PHOTO_BUCKET).getPublicUrl(path).data.publicUrl);
+  }
+  return { urls, error: null };
 }
 
 async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
