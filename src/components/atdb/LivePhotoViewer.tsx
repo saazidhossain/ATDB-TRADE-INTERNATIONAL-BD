@@ -294,16 +294,24 @@ export function LivePhotoViewer() {
               layout
               className="relative overflow-hidden rounded-md border border-white/12 bg-white/[0.04] p-2 shadow-[0_24px_70px_-32px_oklch(0_0_0/0.8)] backdrop-blur-md"
             >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-sm bg-iron/20">
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                aria-label="Open photo viewer"
+                className="group/img relative aspect-[16/10] w-full overflow-hidden rounded-sm bg-iron/20"
+              >
                 <AnimatePresence mode="wait">
                   <motion.img
                     key={active.url}
                     src={active.url}
                     alt={`${active.equipmentName} real current condition`}
                     {...imageTransitions.mainImageEnter}
-                    className="h-full w-full object-contain p-4 sm:p-8"
+                    className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover/img:scale-[1.02] sm:p-8"
                   />
                 </AnimatePresence>
+                <span className="pointer-events-none absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-iron-deep/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover/img:opacity-100">
+                  <Maximize2 className="h-3 w-3" /> View
+                </span>
                 
                 {/* Responsive Padding Overlay */}
                 <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
