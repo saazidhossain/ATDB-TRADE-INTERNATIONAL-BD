@@ -464,6 +464,18 @@ export function LivePhotoViewer() {
           </motion.div>
         )}
       </div>
+
+      <PhotoLightbox
+        photos={filtered.map((p) => ({
+          url: p.url,
+          caption: p.equipmentName,
+          subCaption: `${p.equipmentId} · ${categoryLabel(p.category)}`,
+        }))}
+        index={Math.max(0, activeIndex)}
+        open={lightboxOpen && filtered.length > 0}
+        onClose={() => setLightboxOpen(false)}
+        onIndexChange={(i) => setActiveUrl(filtered[i]?.url ?? null)}
+      />
     </section>
   );
 }
