@@ -6,6 +6,7 @@ import { CATEGORIES, type EquipmentCategory } from "@/lib/atdb-data";
 import { useHostedRealPhotoFeed, type HostedRealPhoto } from "@/lib/real-photos";
 import { useFontClass, useI18n } from "@/lib/i18n";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PhotoLightbox } from "./PhotoLightbox";
 import { cn } from "@/lib/utils";
 import {
   imageTransitions,
