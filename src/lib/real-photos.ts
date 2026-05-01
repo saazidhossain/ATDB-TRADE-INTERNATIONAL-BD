@@ -103,6 +103,20 @@ function classify(base: string): { type: number; index: number } {
   return { type: 99, index: 0 };
 }
 
+// Static external real photos: real on-site equipment photos referenced by URL.
+// Format: { equipmentId: string; url: string; sort?: number }
+// These are merged with build-time file-system photos and appear in the
+// per-equipment gallery AND in the home-page LivePhotoViewer.
+const STATIC_EXTERNAL_REAL_PHOTOS: Array<{ equipmentId: string; url: string }> = [
+  // Dynapac CC20 Double Drum (ATDB-RR-004) — two real on-site shots
+  { equipmentId: "ATDB-RR-004", url: "https://github.com/user-attachments/assets/e81d3144-2897-42ea-a0c4-3e33d350982e" },
+  { equipmentId: "ATDB-RR-004", url: "https://github.com/user-attachments/assets/08ace9b1-6087-41cb-91ae-71c4194cdb22" },
+  // Support equipment — generators, drill hammers, cutting machines (ATDB-SP-006)
+  { equipmentId: "ATDB-SP-006", url: "https://github.com/user-attachments/assets/2923c6b4-17be-4483-93fb-d9c44f6c19f8" },
+  // CAT 320BU Excavator (ATDB-EX-002) — real on-site shot
+  { equipmentId: "ATDB-EX-002", url: "https://github.com/user-attachments/assets/5280acf6-4c26-44dc-86b1-df426dfb769c" },
+];
+
 // Build an ID -> [url, url, ...] map with deterministic ordering:
 // (1) equipment ID (asc) — groups stay together
 // (2) photo type weight (asc) — main → side → cabin → engine → attach → detail
@@ -113,7 +127,11 @@ const REAL_PHOTOS: Record<string, string[]> = (() => {
   const entries: Entry[] = Object.entries(modules).map(([path, url]) => {
     const file = path.split("/").pop() ?? "";
     const base = file.replace(/\.[^.]+$/, "");
-    const id = base.replace(/-(\d+|[a-z]+)$/i, "").toUpperCase();
+    // Extract the equipment ID prefix (e.g. "ATDB-RR-004" from "ATDB-RR-004-2" or "ATDB-RR-004-main").
+    // Using the same pattern as classify() ensures single-photo files (no extra suffix) and
+    // multi-photo files (-1, -2, -main, etc.) all map to the same equipment ID.
+    const prefixMatch = base.match(/^([A-Za-z]+-[A-Za-z]+-\d+)/i);
+    const id = (prefixMatch ? prefixMatch[1] : base).toUpperCase();
     const { type, index } = classify(base);
     return { id, file, base, url, type, index };
   });
@@ -130,6 +148,14 @@ const REAL_PHOTOS: Record<string, string[]> = (() => {
     if (!out[e.id]) out[e.id] = [];
     out[e.id].push(e.url);
   }
+
+  // Merge static external real photos (de-duplicated by URL).
+  for (const { equipmentId, url } of STATIC_EXTERNAL_REAL_PHOTOS) {
+    const key = equipmentId.toUpperCase();
+    if (!out[key]) out[key] = [];
+    if (!out[key].includes(url)) out[key].push(url);
+  }
+
   return out;
 })();
 
@@ -170,6 +196,29 @@ export type PhotoLoadState<T> = {
 
 const REAL_PHOTO_BUCKET = "equipment-real-photos";
 const IMAGE_FILE_RE = /\.(webp|jpe?g|png)$/i;
+
+/**
+ * Returns all build-time (file-system + static external) real photos as
+ * HostedRealPhoto entries so they can be included in the home-page feed.
+ */
+export function getBuildTimePhotoFeed(): HostedRealPhoto[] {
+  const photos: HostedRealPhoto[] = [];
+  for (const eq of FLEET) {
+    const urls = getRealPhotos(eq.id);
+    for (let i = 0; i < urls.length; i++) {
+      photos.push({
+        equipmentId: eq.id,
+        equipmentName: eq.name,
+        category: eq.category,
+        url: urls[i],
+        sort: urls.length - i, // first photo sorts highest
+        createdAt: "",
+        source: "storage",
+      });
+    }
+  }
+  return photos;
+}
 
 const skippedRuntime = new Map<string, SkippedPhoto>();
 
@@ -377,7 +426,8 @@ export function useAllRealPhotosState(equipmentId: string, bumpKey: number = 0, 
 }
 
 export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<HostedRealPhoto> {
-  const [photos, setPhotos] = useState<HostedRealPhoto[]>([]);
+  const buildTimePhotos = getBuildTimePhotoFeed();
+  const [hostedPhotos, setHostedPhotos] = useState<HostedRealPhoto[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -387,7 +437,7 @@ export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<H
     setRefreshing(true);
     fetchAllHostedRealPhotosState()
       .then((result) => {
-        setPhotos(result.photos);
+        setHostedPhotos(result.photos);
         setError(result.error);
         setLastUpdated(Date.now());
       })
@@ -410,5 +460,13 @@ export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<H
       supabase.removeChannel(channel);
     };
   }, [pollMs, refresh]);
+
+  // Merge build-time photos with Supabase-hosted photos (de-duplicated by URL).
+  // Build-time photos appear first so real on-site shots are always visible even
+  // before Supabase responds.
+  const seen = new Set<string>();
+  const photos = [...buildTimePhotos, ...hostedPhotos].filter((p) =>
+    seen.has(p.url) ? false : (seen.add(p.url), true),
+  );
   return { photos, loading, refreshing, error, lastUpdated, refresh };
 }
