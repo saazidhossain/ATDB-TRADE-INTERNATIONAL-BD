@@ -9,6 +9,7 @@ import { ReviewsSection, SAMPLE_REVIEWS, reviewAggregate } from "@/components/at
 import { WhatsappButton } from "@/components/atdb/WhatsappButton";
 import { ContactChannelButton } from "@/components/atdb/ContactChannelButton";
 import { EquipmentGallery, type GallerySlot } from "@/components/atdb/EquipmentGallery";
+import { RealPhotoVerifyPanel } from "@/components/atdb/RealPhotoVerifyPanel";
 import {
   CATEGORIES,
   FLEET,
@@ -205,6 +206,7 @@ function EquipmentDetailPage() {
               loading={realPhotoState.loading}
             />
             <RealPhotoStatus state={realPhotoState} fontClass={fontClass} />
+            <RealPhotoVerifyPanel equipmentId={eq.id} state={realPhotoState} />
           </div>
 
           {/* Info */}
