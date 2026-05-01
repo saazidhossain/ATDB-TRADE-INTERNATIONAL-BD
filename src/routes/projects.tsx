@@ -49,6 +49,9 @@ export const Route = createFileRoute("/projects")({
       { property: "og:image", content: HERO_PROJECT_IMAGE },
       { name: "twitter:image", content: HERO_PROJECT_IMAGE },
     ],
+    links: [
+      { rel: "canonical", href: "https://www.atdbtrade.com/projects" },
+    ],
     scripts: [
       {
         type: "application/ld+json",

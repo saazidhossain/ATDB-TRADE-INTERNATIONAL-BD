@@ -15,6 +15,9 @@ export const Route = createFileRoute("/about")({
       { property: "og:image", content: aboutOg },
       { name: "twitter:image", content: aboutOg },
     ],
+    links: [
+      { rel: "canonical", href: "https://www.atdbtrade.com/about" },
+    ],
   }),
   component: AboutPage,
 });

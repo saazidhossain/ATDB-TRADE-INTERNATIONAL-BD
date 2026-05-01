@@ -27,6 +27,9 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: heroImg },
       { name: "twitter:image", content: heroImg },
     ],
+    links: [
+      { rel: "canonical", href: "https://www.atdbtrade.com/" },
+    ],
   }),
   component: Index,
 });

@@ -320,11 +320,11 @@ export const easingFunctions = {
 
 export const springPhysics = {
   // Bouncy spring
-  bouncy: { type: "spring", stiffness: 300, damping: 10, mass: 1 },
+  bouncy: { type: "spring" as const, stiffness: 300, damping: 10, mass: 1 },
   // Smooth spring
-  smooth: { type: "spring", stiffness: 200, damping: 20, mass: 1 },
+  smooth: { type: "spring" as const, stiffness: 200, damping: 20, mass: 1 },
   // Tight spring
-  tight: { type: "spring", stiffness: 400, damping: 30, mass: 1 },
+  tight: { type: "spring" as const, stiffness: 400, damping: 30, mass: 1 },
   // Loose spring
-  loose: { type: "spring", stiffness: 100, damping: 10, mass: 1 },
+  loose: { type: "spring" as const, stiffness: 100, damping: 10, mass: 1 },
 };

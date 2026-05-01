@@ -52,6 +52,9 @@ export const Route = createRootRoute({
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "canonical", href: "https://www.atdbtrade.com" },
+      { rel: "alternate", hreflang: "en", href: "https://www.atdbtrade.com" },
+      { rel: "alternate", hreflang: "bn", href: "https://www.atdbtrade.com" },
+      { rel: "alternate", hreflang: "x-default", href: "https://www.atdbtrade.com" },
     ],
     scripts: [
       {
@@ -60,15 +63,26 @@ export const Route = createRootRoute({
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "Organization",
+              "@type": ["Organization", "LocalBusiness"],
               "@id": "https://www.atdbtrade.com/#organization",
               name: "ATDB Trade International",
               url: "https://www.atdbtrade.com",
               description: "Premier Heavy Equipment Rental in Bangladesh.",
               foundingDate: "2000",
-              location: {
-                "@type": "Place",
-                name: "Dhaka & Tangail, Bangladesh",
+              telephone: "+8801712106242",
+              email: "atdbtrade@gmail.com",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Dhaka",
+                addressCountry: "BD",
+              },
+              areaServed: { "@type": "Country", name: "Bangladesh" },
+              priceRange: "৳৳",
+              openingHoursSpecification: {
+                "@type": "OpeningHoursSpecification",
+                dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                opens: "08:00",
+                closes: "20:00",
               },
             },
             {
@@ -77,6 +91,7 @@ export const Route = createRootRoute({
               url: "https://www.atdbtrade.com",
               name: "ATDB Trade International",
               publisher: { "@id": "https://www.atdbtrade.com/#organization" },
+              inLanguage: ["en", "bn"],
             },
           ],
         }),

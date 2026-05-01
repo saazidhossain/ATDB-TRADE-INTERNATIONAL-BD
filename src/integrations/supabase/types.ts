@@ -59,30 +59,78 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_requests: {
+        Row: {
+          id: string
+          reference: string
+          equipment_ids: string[]
+          project_location: string | null
+          start_date: string | null
+          end_date: string | null
+          notes: string | null
+          source: string
+          ip_hash: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          reference?: string
+          equipment_ids: string[]
+          project_location?: string | null
+          start_date?: string | null
+          end_date?: string | null
+          notes?: string | null
+          source?: string
+          ip_hash?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          reference?: string
+          equipment_ids?: string[]
+          project_location?: string | null
+          start_date?: string | null
+          end_date?: string | null
+          notes?: string | null
+          source?: string
+          ip_hash?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       real_photos: {
         Row: {
+          caption: string | null
+          condition_notes: string | null
           created_at: string
           equipment_id: string
           id: string
           public_url: string
           sort_index: number
           storage_path: string
+          uploader_name: string | null
         }
         Insert: {
+          caption?: string | null
+          condition_notes?: string | null
           created_at?: string
           equipment_id: string
           id?: string
           public_url: string
           sort_index?: number
           storage_path: string
+          uploader_name?: string | null
         }
         Update: {
+          caption?: string | null
+          condition_notes?: string | null
           created_at?: string
           equipment_id?: string
           id?: string
           public_url?: string
           sort_index?: number
           storage_path?: string
+          uploader_name?: string | null
         }
         Relationships: []
       }
