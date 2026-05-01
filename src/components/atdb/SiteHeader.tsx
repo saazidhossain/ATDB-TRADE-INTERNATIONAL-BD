@@ -100,11 +100,7 @@ export function SiteHeader() {
           <CartButton />
           <LangSwitch lang={lang} onToggle={toggleLang} />
           {/* Unified social/contact channel row — equal alignment */}
-          <div
-            className="hidden items-center gap-1.5 sm:flex"
-            role="group"
-            aria-label="Contact channels"
-          >
+          <div className="hidden items-center gap-1.5 sm:flex" role="group" aria-label="Contact channels">
             <span aria-hidden="true" className="mx-0.5 h-5 w-px bg-white/15 lg:mx-1" />
             <FacebookLink variant="header" />
             <ContactChannelButton
@@ -123,10 +119,7 @@ export function SiteHeader() {
             >
               {t("nav.email")}
             </ContactChannelButton>
-            <span
-              aria-hidden="true"
-              className="mx-0.5 hidden h-5 w-px bg-white/15 md:inline-block lg:mx-1"
-            />
+            <span aria-hidden="true" className="mx-0.5 hidden h-5 w-px bg-white/15 md:inline-block lg:mx-1" />
             <WhatsappButton
               href={buildWhatsappGenericLink(undefined, lang)}
               variant="header"
@@ -186,10 +179,10 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-between py-3 text-sm text-iron"
                 >
-                  <span className={`text-muted-foreground ${fontClass}`}>{t("nav.call")}</span>
-                  <span className="font-display font-semibold tracking-wide text-iron">
-                    {COMPANY.phones[0].number}
+                  <span className={`text-muted-foreground ${fontClass}`}>
+                    {t("nav.call")}
                   </span>
+                  <span className="font-display font-semibold tracking-wide text-iron">{COMPANY.phones[0].number}</span>
                 </a>
               </li>
               <li>
@@ -198,10 +191,10 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-between gap-3 py-3 text-sm text-iron"
                 >
-                  <span className={`text-muted-foreground ${fontClass}`}>{t("nav.email")}</span>
-                  <span className="truncate font-display font-semibold text-iron">
-                    {COMPANY.email}
+                  <span className={`text-muted-foreground ${fontClass}`}>
+                    {t("nav.email")}
                   </span>
+                  <span className="truncate font-display font-semibold text-iron">{COMPANY.email}</span>
                 </a>
               </li>
               <li>
@@ -235,23 +228,10 @@ function LangSwitch({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
       title={`Switch to ${nextLang}`}
       className="group relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-full border border-white/15 bg-white/5 px-3 font-display text-xs font-semibold text-white/90 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:-translate-y-0.5 hover:border-safety/60 hover:bg-white/10 hover:text-safety focus-visible:-translate-y-0.5 focus-visible:border-safety focus-visible:bg-white/10 focus-visible:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep"
     >
-      <Globe
-        aria-hidden="true"
-        className="h-3.5 w-3.5 transition-transform duration-500 group-hover:rotate-180 group-focus-visible:rotate-180"
-      />
-      <span
-        aria-current={lang === "en" ? "true" : undefined}
-        className={lang === "en" ? "text-safety" : "text-white/50"}
-      >
-        EN
-      </span>
+      <Globe aria-hidden="true" className="h-3.5 w-3.5 transition-transform duration-500 group-hover:rotate-180 group-focus-visible:rotate-180" />
+      <span aria-current={lang === "en" ? "true" : undefined} className={lang === "en" ? "text-safety" : "text-white/50"}>EN</span>
       <span className="text-white/25">/</span>
-      <span
-        aria-current={lang === "bn" ? "true" : undefined}
-        className={`font-bn ${lang === "bn" ? "text-safety" : "text-white/50"}`}
-      >
-        বাং
-      </span>
+      <span aria-current={lang === "bn" ? "true" : undefined} className={`font-bn ${lang === "bn" ? "text-safety" : "text-white/50"}`}>বাং</span>
     </button>
   );
 }

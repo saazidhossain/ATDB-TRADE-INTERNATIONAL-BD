@@ -35,6 +35,8 @@ declare module "@tanstack/react-start/server" {
   export const getValidatedQuery: any;
 }
 
+
+
 // react-resizable-panels v2 doesn't export Group/Separator under those
 // names — alias the actual exports so the legacy shadcn import compiles.
 declare module "react-resizable-panels" {

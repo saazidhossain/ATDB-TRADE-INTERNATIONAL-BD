@@ -56,7 +56,9 @@ export function FacebookLink({ variant = "header", label, className = "" }: Face
             style={{ animation: "atdb-ripple 1.6s ease-out infinite" }}
           />
         </span>
-        <span className="relative z-10 tracking-wide">{label ?? "Follow on Facebook"}</span>
+        <span className="relative z-10 tracking-wide">
+          {label ?? "Follow on Facebook"}
+        </span>
       </motion.a>
     );
   }

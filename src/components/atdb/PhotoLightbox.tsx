@@ -137,7 +137,9 @@ export function PhotoLightbox({ photos, index, open, onClose, onIndexChange }: P
           {/* Top toolbar */}
           <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between gap-3 bg-gradient-to-b from-black/70 to-transparent p-4">
             <div className="min-w-0 flex-1 text-white">
-              {photo.caption && <p className="truncate text-sm font-semibold">{photo.caption}</p>}
+              {photo.caption && (
+                <p className="truncate text-sm font-semibold">{photo.caption}</p>
+              )}
               {photo.subCaption && (
                 <p className="truncate text-[11px] uppercase tracking-widest text-white/60">
                   {photo.subCaption} · {index + 1} / {photos.length}
@@ -150,28 +152,16 @@ export function PhotoLightbox({ photos, index, open, onClose, onIndexChange }: P
               )}
             </div>
             <div className="flex items-center gap-2">
-              <ToolbarBtn
-                onClick={() => setZoom((z) => Math.max(MIN_ZOOM, z - 0.5))}
-                aria-label="Zoom out"
-                disabled={zoom <= MIN_ZOOM}
-              >
+              <ToolbarBtn onClick={() => setZoom((z) => Math.max(MIN_ZOOM, z - 0.5))} aria-label="Zoom out" disabled={zoom <= MIN_ZOOM}>
                 <ZoomOut className="h-4 w-4" />
               </ToolbarBtn>
               <span className="hidden min-w-[44px] text-center text-xs font-semibold tabular-nums text-white/80 sm:inline">
                 {Math.round(zoom * 100)}%
               </span>
-              <ToolbarBtn
-                onClick={() => setZoom((z) => Math.min(MAX_ZOOM, z + 0.5))}
-                aria-label="Zoom in"
-                disabled={zoom >= MAX_ZOOM}
-              >
+              <ToolbarBtn onClick={() => setZoom((z) => Math.min(MAX_ZOOM, z + 0.5))} aria-label="Zoom in" disabled={zoom >= MAX_ZOOM}>
                 <ZoomIn className="h-4 w-4" />
               </ToolbarBtn>
-              <ToolbarBtn
-                onClick={reset}
-                aria-label="Reset zoom"
-                disabled={zoom === 1 && pan.x === 0 && pan.y === 0}
-              >
+              <ToolbarBtn onClick={reset} aria-label="Reset zoom" disabled={zoom === 1 && pan.x === 0 && pan.y === 0}>
                 <RotateCcw className="h-4 w-4" />
               </ToolbarBtn>
               <ToolbarBtn onClick={onClose} aria-label="Close">
@@ -185,10 +175,7 @@ export function PhotoLightbox({ photos, index, open, onClose, onIndexChange }: P
             <>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goPrev();
-                }}
+                onClick={(e) => { e.stopPropagation(); goPrev(); }}
                 aria-label="Previous photo"
                 className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20 sm:left-6"
               >
@@ -196,10 +183,7 @@ export function PhotoLightbox({ photos, index, open, onClose, onIndexChange }: P
               </button>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  goNext();
-                }}
+                onClick={(e) => { e.stopPropagation(); goNext(); }}
                 aria-label="Next photo"
                 className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20 sm:right-6"
               >
@@ -232,12 +216,11 @@ export function PhotoLightbox({ photos, index, open, onClose, onIndexChange }: P
                   transform: `translate(calc(-50% + ${pan.x}px), calc(-50% + ${pan.y}px)) scale(${zoom})`,
                   transformOrigin: "center center",
                   cursor: zoom > 1 ? "grab" : "zoom-in",
-                  transition:
-                    pinchStartRef.current || panStartRef.current
-                      ? "none"
-                      : "transform 0.18s ease-out",
+                  transition: pinchStartRef.current || panStartRef.current ? "none" : "transform 0.18s ease-out",
                 }}
-                className={cn("absolute left-1/2 top-1/2 max-h-[88vh] max-w-[92vw] object-contain")}
+                className={cn(
+                  "absolute left-1/2 top-1/2 max-h-[88vh] max-w-[92vw] object-contain",
+                )}
               />
             </AnimatePresence>
           </div>

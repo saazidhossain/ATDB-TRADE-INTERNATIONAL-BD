@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import type { TablesUpdate } from "@/integrations/supabase/types";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -41,9 +40,7 @@ export const Route = createFileRoute("/api/photos")({
 
         const { data, error } = await supabaseAdmin
           .from("real_photos")
-          .select(
-            "id, equipment_id, storage_path, public_url, caption, condition_notes, uploader_name, sort_index, created_at",
-          )
+          .select("id, equipment_id, storage_path, public_url, caption, condition_notes, uploader_name, sort_index, created_at")
           .eq("equipment_id", equipmentId.toUpperCase())
           .order("sort_index", { ascending: true })
           .order("created_at", { ascending: true });
@@ -54,18 +51,10 @@ export const Route = createFileRoute("/api/photos")({
 
       DELETE: async ({ request }: { request: Request }) => {
         let body: unknown;
-        try {
-          body = await request.json();
-        } catch {
-          return json({ ok: false, error: "invalid_json" }, 400);
-        }
+        try { body = await request.json(); } catch { return json({ ok: false, error: "invalid_json" }, 400); }
 
         const parsed = DeleteSchema.safeParse(body);
-        if (!parsed.success)
-          return json(
-            { ok: false, error: "validation_error", issues: parsed.error.flatten() },
-            400,
-          );
+        if (!parsed.success) return json({ ok: false, error: "validation_error", issues: parsed.error.flatten() }, 400);
 
         const { storagePath, photoId } = parsed.data;
 
@@ -87,28 +76,23 @@ export const Route = createFileRoute("/api/photos")({
 
       PATCH: async ({ request }: { request: Request }) => {
         let body: unknown;
-        try {
-          body = await request.json();
-        } catch {
-          return json({ ok: false, error: "invalid_json" }, 400);
-        }
+        try { body = await request.json(); } catch { return json({ ok: false, error: "invalid_json" }, 400); }
 
         const parsed = PatchSchema.safeParse(body);
-        if (!parsed.success)
-          return json(
-            { ok: false, error: "validation_error", issues: parsed.error.flatten() },
-            400,
-          );
+        if (!parsed.success) return json({ ok: false, error: "validation_error", issues: parsed.error.flatten() }, 400);
 
         const { photoId, caption, conditionNotes, uploaderName, sortIndex } = parsed.data;
 
-        const updates: TablesUpdate<"real_photos"> = {};
+        const updates: Record<string, unknown> = {};
         if (caption !== undefined) updates.caption = caption;
         if (conditionNotes !== undefined) updates.condition_notes = conditionNotes;
         if (uploaderName !== undefined) updates.uploader_name = uploaderName;
         if (sortIndex !== undefined) updates.sort_index = sortIndex;
 
-        const { error } = await supabaseAdmin.from("real_photos").update(updates).eq("id", photoId);
+        const { error } = await supabaseAdmin
+          .from("real_photos")
+          .update(updates)
+          .eq("id", photoId);
 
         if (error) return json({ ok: false, error: error.message }, 500);
         return json({ ok: true });

@@ -46,22 +46,6 @@ export function WhatsappButton({
   const { lang } = useI18n();
   const fontClass = useFontClass();
 
-  // Guard: if href is missing or empty, render a disabled placeholder so we
-  // never produce a broken <a> link.
-  if (!href) {
-    return (
-      <span
-        role="button"
-        aria-disabled="true"
-        aria-label={ariaLabel ?? "Chat on WhatsApp"}
-        className={`inline-flex items-center justify-center gap-2.5 rounded-sm bg-muted px-7 py-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground cursor-not-allowed opacity-60 ${fullWidth ? "w-full" : ""} ${className}`}
-      >
-        <WaGlyph className="h-4 w-4 fill-muted-foreground" />
-        <span>{children}</span>
-      </span>
-    );
-  }
-
   // ─── HEADER PILL ──────────────────────────────────────────────────
   if (variant === "header") {
     return (
@@ -144,7 +128,11 @@ export function WhatsappButton({
   if (variant === "cta" || variant === "drawer" || variant === "hero" || variant === "ctaDark") {
     const isDark = variant === "ctaDark";
     const isHero = variant === "hero";
-    const sizing = isHero ? "px-7 py-4" : variant === "drawer" ? "px-5 py-3.5" : "px-7 py-4";
+    const sizing = isHero
+      ? "px-7 py-4"
+      : variant === "drawer"
+      ? "px-5 py-3.5"
+      : "px-7 py-4";
     return (
       <motion.a
         href={href}

@@ -1,16 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  Mail,
-  MapPin,
-  Phone,
-  Facebook,
-  MessageCircle,
-  Send,
-  CheckCircle2,
-  AlertCircle,
-  ExternalLink,
-} from "lucide-react";
+import { Mail, MapPin, Phone, Facebook, MessageCircle, Send, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
 import { Layout } from "@/components/atdb/Layout";
 import { FacebookFeed } from "@/components/atdb/FacebookFeed";
 import { WhatsappButton } from "@/components/atdb/WhatsappButton";
@@ -23,21 +13,12 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact ATDB Trade International — WhatsApp, Phone & Quote Form" },
-      {
-        name: "description",
-        content:
-          "Reach ATDB Trade International for heavy equipment rental quotations. WhatsApp +8801712106242. Offices in Dhaka and Tangail.",
-      },
+      { name: "description", content: "Reach ATDB Trade International for heavy equipment rental quotations. WhatsApp +8801712106242. Offices in Dhaka and Tangail." },
       { property: "og:title", content: "Contact ATDB Trade International" },
-      {
-        property: "og:description",
-        content:
-          "WhatsApp, phone, email or quote form — get a heavy-equipment rental quotation in minutes.",
-      },
+      { property: "og:description", content: "WhatsApp, phone, email or quote form — get a heavy-equipment rental quotation in minutes." },
       { property: "og:image", content: contactOg },
       { name: "twitter:image", content: contactOg },
     ],
-    links: [{ rel: "canonical", href: "https://www.atdbtrade.com/contact" }],
   }),
   component: ContactPage,
 });
@@ -62,10 +43,8 @@ function ContactPage() {
     website: "", // honeypot
   });
 
-  const update =
-    (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-      setForm((f) => ({ ...f, [k]: e.target.value }));
+  const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,14 +96,15 @@ function ContactPage() {
       <section className="bg-iron-deep py-20 text-white md:py-24">
         <div className="container-page">
           <p className="eyebrow !text-bronze-glow">{t("nav.contact")}</p>
-          <h1
-            className={`mt-2 max-w-3xl text-3xl font-bold text-white sm:text-4xl md:text-5xl ${fontClass}`}
-          >
+          <h1 className={`mt-2 max-w-3xl text-3xl font-bold text-white sm:text-4xl md:text-5xl ${fontClass}`}>
             {t("contact.title")}
           </h1>
           <p className="mt-4 max-w-2xl text-base text-white/75 md:text-lg">{t("contact.sub")}</p>
           <div className="mt-8">
-            <WhatsappButton href={buildWhatsappGenericLink(undefined, lang)} variant="hero">
+            <WhatsappButton
+              href={buildWhatsappGenericLink(undefined, lang)}
+              variant="hero"
+            >
               {t("common.openWhatsapp")}
             </WhatsappButton>
           </div>
@@ -145,9 +125,7 @@ function ContactPage() {
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-success" />
                   <div>
-                    <p className={`text-base font-bold text-success ${fontClass}`}>
-                      {t("contact.success.t")}
-                    </p>
+                    <p className={`text-base font-bold text-success ${fontClass}`}>{t("contact.success.t")}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{t("contact.success.d")}</p>
                     <button
                       type="button"
@@ -174,50 +152,11 @@ function ContactPage() {
                 />
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field
-                    label={t("contact.name")}
-                    name="name"
-                    required
-                    value={form.name}
-                    onChange={update("name")}
-                    error={errors.name}
-                    fontClass={fontClass}
-                  />
-                  <Field
-                    label={t("contact.email")}
-                    name="email"
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={update("email")}
-                    error={errors.email}
-                    fontClass={fontClass}
-                  />
-                  <Field
-                    label={t("contact.phone")}
-                    name="phone"
-                    type="tel"
-                    value={form.phone}
-                    onChange={update("phone")}
-                    error={errors.phone}
-                    fontClass={fontClass}
-                  />
-                  <Field
-                    label={t("contact.company")}
-                    name="company"
-                    value={form.company}
-                    onChange={update("company")}
-                    error={errors.company}
-                    fontClass={fontClass}
-                  />
-                  <Field
-                    label={t("contact.location")}
-                    name="project_location"
-                    value={form.project_location}
-                    onChange={update("project_location")}
-                    error={errors.project_location}
-                    fontClass={fontClass}
-                  />
+                  <Field label={t("contact.name")} name="name" required value={form.name} onChange={update("name")} error={errors.name} fontClass={fontClass} />
+                  <Field label={t("contact.email")} name="email" type="email" required value={form.email} onChange={update("email")} error={errors.email} fontClass={fontClass} />
+                  <Field label={t("contact.phone")} name="phone" type="tel" value={form.phone} onChange={update("phone")} error={errors.phone} fontClass={fontClass} />
+                  <Field label={t("contact.company")} name="company" value={form.company} onChange={update("company")} error={errors.company} fontClass={fontClass} />
+                  <Field label={t("contact.location")} name="project_location" value={form.project_location} onChange={update("project_location")} error={errors.project_location} fontClass={fontClass} />
                   <SelectField
                     label={t("contact.equipment")}
                     name="equipment_interest"
@@ -230,10 +169,7 @@ function ContactPage() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className={`mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}
-                  >
+                  <label htmlFor="message" className={`mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}>
                     {t("contact.message")} <span className="text-safety">*</span>
                   </label>
                   <textarea
@@ -247,14 +183,10 @@ function ContactPage() {
                     onChange={update("message")}
                     placeholder={t("contact.message.ph")}
                     className={`w-full resize-none rounded-sm border bg-background px-4 py-3 text-sm text-iron transition-colors focus:outline-none ${
-                      errors.message
-                        ? "border-destructive focus:border-destructive"
-                        : "border-border focus:border-safety"
+                      errors.message ? "border-destructive focus:border-destructive" : "border-border focus:border-safety"
                     }`}
                   />
-                  {errors.message && (
-                    <p className="mt-1 text-xs text-destructive">{errors.message}</p>
-                  )}
+                  {errors.message && <p className="mt-1 text-xs text-destructive">{errors.message}</p>}
                 </div>
 
                 {status === "error" && (
@@ -286,9 +218,7 @@ function ContactPage() {
           <div className="space-y-10">
             <div>
               <p className={`eyebrow ${fontClassEyebrow}`}>{t("contact.sidebar.direct")}</p>
-              <h2 className={`mt-2 text-xl font-bold text-iron md:text-2xl ${fontClass}`}>
-                {t("contact.sidebar.directTitle")}
-              </h2>
+              <h2 className={`mt-2 text-xl font-bold text-iron md:text-2xl ${fontClass}`}>{t("contact.sidebar.directTitle")}</h2>
 
               {/* Minimal divided list — flat, properly aligned */}
               <ul className="mt-5 divide-y divide-border border-y border-border">
@@ -300,9 +230,7 @@ function ContactPage() {
                     >
                       <Phone className="h-4 w-4 shrink-0 text-bronze-glow" strokeWidth={1.75} />
                       <span className="font-display font-semibold tracking-wide">{p.number}</span>
-                      <span
-                        className={`ml-auto text-[10px] uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}
-                      >
+                      <span className={`ml-auto text-[10px] uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}>
                         {p.label === "Proprietor" ? t("phone.proprietor") : t("phone.ceo")}
                       </span>
                     </a>
@@ -324,14 +252,9 @@ function ContactPage() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 py-3 text-sm text-iron transition-colors hover:text-safety"
                   >
-                    <MessageCircle
-                      className="h-4 w-4 shrink-0 text-bronze-glow"
-                      strokeWidth={1.75}
-                    />
+                    <MessageCircle className="h-4 w-4 shrink-0 text-bronze-glow" strokeWidth={1.75} />
                     <span className="font-display font-semibold">WhatsApp</span>
-                    <span
-                      className={`ml-auto text-[10px] uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}
-                    >
+                    <span className={`ml-auto text-[10px] uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}>
                       {COMPANY.phones[0].number}
                     </span>
                   </a>
@@ -345,9 +268,7 @@ function ContactPage() {
                   >
                     <Facebook className="h-4 w-4 shrink-0 text-bronze-glow" strokeWidth={1.75} />
                     <span className="font-display font-semibold">Facebook</span>
-                    <span
-                      className={`ml-auto text-[10px] uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}
-                    >
+                    <span className={`ml-auto text-[10px] uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}>
                       @atdbtrade
                     </span>
                   </a>
@@ -369,36 +290,19 @@ function ContactPage() {
 
             <div>
               <p className={`eyebrow ${fontClassEyebrow}`}>{t("footer.offices")}</p>
-              <h2 className={`mt-2 text-xl font-bold text-iron md:text-2xl ${fontClass}`}>
-                {t("contact.sidebar.officesTitle")}
-              </h2>
+              <h2 className={`mt-2 text-xl font-bold text-iron md:text-2xl ${fontClass}`}>{t("contact.sidebar.officesTitle")}</h2>
               <ul className="mt-5 space-y-3">
                 {COMPANY.offices.map((o) => {
-                  const labelTr =
-                    o.label === "Corporate Office" ? t("office.corporate") : t("office.branch");
+                  const labelTr = o.label === "Corporate Office" ? t("office.corporate") : t("office.branch");
                   const cityTr = o.city === "Dhaka" ? t("office.dhaka") : t("office.tangail");
-                  const addrTr =
-                    o.city === "Dhaka" ? t("office.dhaka.address") : t("office.tangail.address");
+                  const addrTr = o.city === "Dhaka" ? t("office.dhaka.address") : t("office.tangail.address");
                   return (
-                    <li
-                      key={o.city}
-                      className="flex items-start gap-3 rounded-md border border-border bg-card p-4 transition-shadow duration-250 hover:shadow-card hover:border-safety/40"
-                    >
+                    <li key={o.city} className="flex items-start gap-3 rounded-md border border-border bg-card p-4 transition-shadow duration-250 hover:shadow-card hover:border-safety/40">
                       <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-bronze-glow" />
                       <div>
-                        <p
-                          className={`text-[11px] uppercase tracking-[0.16em] text-safety ${fontClass}`}
-                        >
-                          {labelTr}
-                        </p>
-                        <p className={`mt-0.5 text-sm font-semibold text-iron ${fontClass}`}>
-                          {cityTr}
-                        </p>
-                        <p
-                          className={`mt-1 text-xs leading-relaxed text-muted-foreground ${fontClass}`}
-                        >
-                          {addrTr}
-                        </p>
+                        <p className={`text-[11px] uppercase tracking-[0.16em] text-safety ${fontClass}`}>{labelTr}</p>
+                        <p className={`mt-0.5 text-sm font-semibold text-iron ${fontClass}`}>{cityTr}</p>
+                        <p className={`mt-1 text-xs leading-relaxed text-muted-foreground ${fontClass}`}>{addrTr}</p>
                       </div>
                     </li>
                   );
@@ -442,9 +346,7 @@ function OfficeMaps() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="eyebrow">{t("maps.eyebrow")}</p>
-            <h2 className={`mt-2 text-2xl font-bold text-iron md:text-3xl ${fontClass}`}>
-              {t("maps.title")}
-            </h2>
+            <h2 className={`mt-2 text-2xl font-bold text-iron md:text-3xl ${fontClass}`}>{t("maps.title")}</h2>
           </div>
           <div className="inline-flex rounded-md border border-border bg-card p-1 shadow-card">
             {(["dhaka", "tangail"] as const).map((c) => (
@@ -483,9 +385,7 @@ function OfficeMaps() {
 
           <aside className="rounded-md border border-border bg-card p-6 shadow-card border-safety-top">
             <p className="text-[11px] uppercase tracking-[0.18em] text-safety">{office.label}</p>
-            <p className={`mt-1 font-display text-xl font-bold text-iron ${fontClass}`}>
-              {office.city}
-            </p>
+            <p className={`mt-1 font-display text-xl font-bold text-iron ${fontClass}`}>{office.city}</p>
             <p className="mt-3 flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-bronze-glow" />
               {office.address}
@@ -535,10 +435,7 @@ function Field({
 }) {
   return (
     <div>
-      <label
-        htmlFor={name}
-        className={`mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}
-      >
+      <label htmlFor={name} className={`mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}>
         {label} {required && <span className="text-safety">*</span>}
       </label>
       <input
@@ -549,9 +446,7 @@ function Field({
         onChange={onChange}
         required={required}
         className={`w-full rounded-sm border bg-background px-4 py-2.5 text-sm text-iron transition-colors focus:outline-none ${
-          error
-            ? "border-destructive focus:border-destructive"
-            : "border-border focus:border-safety"
+          error ? "border-destructive focus:border-destructive" : "border-border focus:border-safety"
         }`}
       />
       {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
@@ -580,10 +475,7 @@ function SelectField({
   const brands = Array.from(new Set(FLEET.map((f) => f.brand))).sort();
   return (
     <div>
-      <label
-        htmlFor={name}
-        className={`mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}
-      >
+      <label htmlFor={name} className={`mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ${fontClass}`}>
         {label}
       </label>
       <select
@@ -592,9 +484,7 @@ function SelectField({
         value={value}
         onChange={onChange}
         className={`w-full rounded-sm border bg-background px-4 py-2.5 text-sm text-iron transition-colors focus:outline-none ${fontClass} ${
-          error
-            ? "border-destructive focus:border-destructive"
-            : "border-border focus:border-safety"
+          error ? "border-destructive focus:border-destructive" : "border-border focus:border-safety"
         }`}
       >
         <option value="">—</option>
@@ -607,9 +497,7 @@ function SelectField({
         </optgroup>
         <optgroup label={t("contact.equipment.opt.brand")}>
           {brands.map((b) => (
-            <option key={b} value={b}>
-              {b}
-            </option>
+            <option key={b} value={b}>{b}</option>
           ))}
         </optgroup>
       </select>

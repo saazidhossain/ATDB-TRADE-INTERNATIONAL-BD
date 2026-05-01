@@ -20,11 +20,7 @@ export function CartButton({ className = "" }: { className?: string }) {
         }}
       />
       <ShoppingCart aria-hidden="true" className="relative h-4 w-4" strokeWidth={2.2} />
-      {count > 0 && (
-        <span className="sr-only">
-          {count} item{count === 1 ? "" : "s"} in cart
-        </span>
-      )}
+      {count > 0 && <span className="sr-only">{count} item{count === 1 ? "" : "s"} in cart</span>}
       {count > 0 && (
         <span
           aria-hidden="true"

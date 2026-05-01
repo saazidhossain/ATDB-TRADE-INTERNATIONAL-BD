@@ -4,18 +4,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Trash2,
-  Edit3,
-  Check,
-  X,
-  Loader2,
-  RefreshCw,
-  ChevronUp,
-  ChevronDown,
-  Image,
-  AlertTriangle,
-} from "lucide-react";
+import { Trash2, Edit3, Check, X, Loader2, RefreshCw, ChevronUp, ChevronDown, Image, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useFontClass } from "@/lib/i18n";
 
@@ -54,9 +43,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
     try {
       const { data, error: err } = await supabase
         .from("real_photos")
-        .select(
-          "id, equipment_id, storage_path, public_url, caption, condition_notes, uploader_name, sort_index, created_at",
-        )
+        .select("id, equipment_id, storage_path, public_url, caption, condition_notes, uploader_name, sort_index, created_at")
         .eq("equipment_id", equipmentId.toUpperCase())
         .order("sort_index", { ascending: true })
         .order("created_at", { ascending: true });
@@ -69,9 +56,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
     }
   }, [equipmentId]);
 
-  useEffect(() => {
-    fetchPhotos();
-  }, [fetchPhotos]);
+  useEffect(() => { fetchPhotos(); }, [fetchPhotos]);
 
   const startEdit = (photo: ManagedPhoto) => {
     setEditingId(photo.id);
@@ -79,11 +64,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
     setEditNotes(photo.condition_notes ?? "");
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditCaption("");
-    setEditNotes("");
-  };
+  const cancelEdit = () => { setEditingId(null); setEditCaption(""); setEditNotes(""); };
 
   const saveEdit = async (photo: ManagedPhoto) => {
     setSavingId(photo.id);
@@ -93,17 +74,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
         .update({ caption: editCaption.trim() || null, condition_notes: editNotes.trim() || null })
         .eq("id", photo.id);
       if (err) throw err;
-      setPhotos((prev) =>
-        prev.map((p) =>
-          p.id === photo.id
-            ? {
-                ...p,
-                caption: editCaption.trim() || null,
-                condition_notes: editNotes.trim() || null,
-              }
-            : p,
-        ),
-      );
+      setPhotos((prev) => prev.map((p) => p.id === photo.id ? { ...p, caption: editCaption.trim() || null, condition_notes: editNotes.trim() || null } : p));
       cancelEdit();
       onChanged?.();
     } catch (e) {
@@ -159,9 +130,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p
-          className={`font-display text-[11px] font-bold uppercase tracking-[0.18em] text-iron ${fontClass}`}
-        >
+        <p className={`font-display text-[11px] font-bold uppercase tracking-[0.18em] text-iron ${fontClass}`}>
           Manage Photos ({photos.length})
         </p>
         <button
@@ -183,9 +152,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
       {photos.length === 0 ? (
         <div className="rounded-md border border-dashed border-border p-6 text-center">
           <Image className="mx-auto h-8 w-8 text-muted-foreground" />
-          <p className={`mt-2 text-sm text-muted-foreground ${fontClass}`}>
-            No uploaded photos yet
-          </p>
+          <p className={`mt-2 text-sm text-muted-foreground ${fontClass}`}>No uploaded photos yet</p>
         </div>
       ) : (
         <AnimatePresence>
@@ -201,12 +168,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
               <div className="flex gap-3">
                 {/* Thumbnail */}
                 <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-sm border border-border bg-muted">
-                  <img
-                    src={photo.public_url}
-                    alt={photo.caption ?? ""}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
+                  <img src={photo.public_url} alt={photo.caption ?? ""} className="h-full w-full object-cover" loading="lazy" />
                 </div>
 
                 {/* Info / edit */}
@@ -236,11 +198,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
                           disabled={savingId === photo.id}
                           className="inline-flex items-center gap-1 rounded-sm bg-safety px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white hover:bg-safety-deep disabled:opacity-60"
                         >
-                          {savingId === photo.id ? (
-                            <Loader2 className="h-3 w-3 animate-spin" />
-                          ) : (
-                            <Check className="h-3 w-3" />
-                          )}
+                          {savingId === photo.id ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
                           Save
                         </button>
                         <button
@@ -255,30 +213,18 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
                   ) : (
                     <>
                       <p className={`text-xs font-semibold text-iron ${fontClass}`}>
-                        {photo.caption || (
-                          <span className="italic text-muted-foreground">No caption</span>
-                        )}
+                        {photo.caption || <span className="italic text-muted-foreground">No caption</span>}
                       </p>
                       {photo.condition_notes && (
-                        <p
-                          className={`mt-0.5 text-xs text-muted-foreground line-clamp-2 ${fontClass}`}
-                        >
-                          {photo.condition_notes}
-                        </p>
+                        <p className={`mt-0.5 text-xs text-muted-foreground line-clamp-2 ${fontClass}`}>{photo.condition_notes}</p>
                       )}
                       {photo.uploader_name && (
-                        <p
-                          className={`mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-safety ${fontClass}`}
-                        >
+                        <p className={`mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-safety ${fontClass}`}>
                           ↑ {photo.uploader_name}
                         </p>
                       )}
                       <p className="mt-0.5 text-[10px] text-muted-foreground">
-                        {new Date(photo.created_at).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })}
+                        {new Date(photo.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
                       </p>
                     </>
                   )}
@@ -319,11 +265,7 @@ export function AssetManager({ equipmentId, onChanged }: Props) {
                     className="grid h-7 w-7 place-items-center rounded-sm border border-border text-muted-foreground hover:border-destructive hover:text-destructive disabled:opacity-60"
                     aria-label="Delete photo"
                   >
-                    {deletingId === photo.id ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      <Trash2 className="h-3.5 w-3.5" />
-                    )}
+                    {deletingId === photo.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
                   </button>
                 </div>
               </div>

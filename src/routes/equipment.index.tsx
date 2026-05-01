@@ -21,19 +21,13 @@ export const Route = createFileRoute("/equipment/")({
       { title: "Equipment Fleet — ATDB Trade International" },
       {
         name: "description",
-        content:
-          "Browse ATDB's complete heavy equipment fleet: 7 mobile cranes, 9 road rollers, 6 excavators, plus support equipment. Liebherr, Kato, Sakai, CAT, Komatsu, JCB, CASE.",
+        content: "Browse ATDB's complete heavy equipment fleet: 7 mobile cranes, 9 road rollers, 6 excavators, plus support equipment. Liebherr, Kato, Sakai, CAT, Komatsu, JCB, CASE.",
       },
       { property: "og:title", content: "Equipment Fleet — ATDB Trade International" },
-      {
-        property: "og:description",
-        content:
-          "30+ certified heavy machines across cranes, rollers, excavators and support equipment.",
-      },
+      { property: "og:description", content: "30+ certified heavy machines across cranes, rollers, excavators and support equipment." },
       { property: "og:image", content: equipmentOg },
       { name: "twitter:image", content: equipmentOg },
     ],
-    links: [{ rel: "canonical", href: "https://www.atdbtrade.com/equipment" }],
   }),
   component: EquipmentIndex,
 });
@@ -50,7 +44,9 @@ function EquipmentIndex() {
           <h1 className={`mt-2 max-w-3xl text-4xl font-bold text-white md:text-5xl ${fontClass}`}>
             {t("eq.title")}
           </h1>
-          <p className={`mt-4 max-w-2xl text-white/80 ${fontClass}`}>{t("eq.sub")}</p>
+          <p className={`mt-4 max-w-2xl text-white/80 ${fontClass}`}>
+            {t("eq.sub")}
+          </p>
         </div>
       </section>
 
@@ -68,37 +64,18 @@ function EquipmentIndex() {
             const labelKey = `cat.${c.slug}.label`;
             const taglineKey = `cat.${c.slug}.tagline`;
             return (
-              <motion.div
-                key={c.slug}
-                variants={categoryCardVariants}
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 280, damping: 22 }}
-              >
-                <Link
-                  to="/equipment/$category"
-                  params={{ category: c.slug }}
-                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden rounded-md border border-border glass-card border-safety-top shadow-card hover:shadow-card-hover"
-                >
-                  <img
-                    src={c.image}
-                    alt={tx(labelKey)}
-                    loading="lazy"
-                    className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+              <motion.div key={c.slug} variants={categoryCardVariants}
+                whileHover={{ y: -6 }} transition={{ type: "spring", stiffness: 280, damping: 22 }}>
+                <Link to="/equipment/$category" params={{ category: c.slug }}
+                  className="group relative isolate flex aspect-[16/10] flex-col justify-end overflow-hidden rounded-md border border-border glass-card border-safety-top shadow-card hover:shadow-card-hover">
+                  <img src={c.image} alt={tx(labelKey)} loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 -z-10 bg-gradient-to-t from-iron-deep/90 via-iron-deep/60 to-transparent" />
                   <div className="p-6 text-white md:p-8">
                     <p className="font-bn text-sm text-bronze-glow">{c.label_bn}</p>
-                    <h2 className={`mt-1 text-2xl font-bold text-white md:text-3xl ${fontClass}`}>
-                      {tx(labelKey)}
-                    </h2>
-                    <p className={`mt-1 text-sm text-white/80 ${fontClass}`}>
-                      {count} {t("common.units")} · {tx(taglineKey)}
-                    </p>
-                    <span
-                      className={`mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-safety ${fontClass}`}
-                    >
-                      {t("common.exploreCategory")}{" "}
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    <h2 className={`mt-1 text-2xl font-bold text-white md:text-3xl ${fontClass}`}>{tx(labelKey)}</h2>
+                    <p className={`mt-1 text-sm text-white/80 ${fontClass}`}>{count} {t("common.units")} · {tx(taglineKey)}</p>
+                    <span className={`mt-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-safety ${fontClass}`}>
+                      {t("common.exploreCategory")} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                     </span>
                   </div>
                 </Link>

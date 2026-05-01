@@ -54,22 +54,11 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
   const selectFile = useCallback((file: File) => {
     const parsed = fileSchema.safeParse({ size: file.size, type: file.type });
     if (!parsed.success) {
-      setState((s) => ({
-        ...s,
-        step: "error",
-        errorMessage: parsed.error.issues[0]?.message ?? "Invalid file",
-      }));
+      setState((s) => ({ ...s, step: "error", errorMessage: parsed.error.issues[0]?.message ?? "Invalid file" }));
       return;
     }
     const previewUrl = URL.createObjectURL(file);
-    setState({
-      step: "preview",
-      file,
-      previewUrl,
-      errorMessage: null,
-      successUrl: null,
-      photoId: null,
-    });
+    setState({ step: "preview", file, previewUrl, errorMessage: null, successUrl: null, photoId: null });
   }, []);
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,10 +67,7 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
     e.target.value = "";
   };
 
-  const onDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+  const onDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); };
   const onDragLeave = () => setIsDragging(false);
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
@@ -95,12 +81,7 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
     setState((s) => ({ ...s, step: "uploading" }));
 
     try {
-      const ext =
-        state.file.name
-          .split(".")
-          .pop()
-          ?.toLowerCase()
-          .replace(/[^a-z0-9]/g, "") || "jpg";
+      const ext = state.file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
       const path = `${equipmentId.toUpperCase()}/${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
 
       const { error: uploadErr } = await supabase.storage
@@ -148,14 +129,7 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
 
   const reset = () => {
     if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
-    setState({
-      step: "idle",
-      file: null,
-      previewUrl: null,
-      errorMessage: null,
-      successUrl: null,
-      photoId: null,
-    });
+    setState({ step: "idle", file: null, previewUrl: null, errorMessage: null, successUrl: null, photoId: null });
     setUploaderName("");
     setCaption("");
     setConditionNotes("");
@@ -168,25 +142,14 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
           <Camera className="h-4 w-4" />
         </div>
         <div>
-          <p
-            className={`font-display text-[11px] font-bold uppercase tracking-[0.16em] text-iron ${fontClass}`}
-          >
+          <p className={`font-display text-[11px] font-bold uppercase tracking-[0.16em] text-iron ${fontClass}`}>
             {t("realPhoto.upload.title")}
           </p>
-          <p className={`text-xs text-muted-foreground ${fontClass}`}>
-            {t("realPhoto.upload.help")}
-          </p>
+          <p className={`text-xs text-muted-foreground ${fontClass}`}>{t("realPhoto.upload.help")}</p>
         </div>
       </div>
 
-      <input
-        ref={inputRef}
-        type="file"
-        accept={ACCEPTED_EXT}
-        onChange={onFileChange}
-        className="hidden"
-        aria-label={t("realPhoto.upload.title")}
-      />
+      <input ref={inputRef} type="file" accept={ACCEPTED_EXT} onChange={onFileChange} className="hidden" aria-label={t("realPhoto.upload.title")} />
 
       {/* STEP: idle — drop zone */}
       {(state.step === "idle" || state.step === "error") && (
@@ -207,21 +170,15 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
         >
           <Upload className={`h-6 w-6 ${isDragging ? "text-safety" : "text-muted-foreground"}`} />
           <div>
-            <p className={`text-sm font-semibold text-iron ${fontClass}`}>
-              {t("realPhoto.upload.cta")}
-            </p>
-            <p className={`mt-0.5 text-xs text-muted-foreground ${fontClass}`}>
-              JPG · PNG · WebP · max 8 MB
-            </p>
+            <p className={`text-sm font-semibold text-iron ${fontClass}`}>{t("realPhoto.upload.cta")}</p>
+            <p className={`mt-0.5 text-xs text-muted-foreground ${fontClass}`}>JPG · PNG · WebP · max 8 MB</p>
           </div>
         </div>
       )}
 
       {/* Error message */}
       {state.step === "error" && state.errorMessage && (
-        <p
-          className={`mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-destructive ${fontClass}`}
-        >
+        <p className={`mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-destructive ${fontClass}`}>
           <X className="h-3.5 w-3.5" />
           {state.errorMessage}
         </p>
@@ -303,9 +260,7 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
       {state.step === "uploading" && (
         <div className="mt-3 flex items-center justify-center gap-3 rounded-md border border-border bg-muted/40 p-4">
           <Loader2 className="h-5 w-5 animate-spin text-safety" />
-          <p className={`text-sm font-semibold text-iron ${fontClass}`}>
-            {t("realPhoto.upload.uploading")}
-          </p>
+          <p className={`text-sm font-semibold text-iron ${fontClass}`}>{t("realPhoto.upload.uploading")}</p>
         </div>
       )}
 
@@ -314,15 +269,9 @@ export function RealPhotoUpload({ equipmentId, onUploaded }: Props) {
         <div className="mt-3 space-y-3">
           <div className="flex items-center gap-2 rounded-md border border-success/30 bg-success/5 p-3">
             <Check className="h-4 w-4 text-success" />
-            <p className={`text-sm font-semibold text-success ${fontClass}`}>
-              {t("realPhoto.upload.success")}
-            </p>
+            <p className={`text-sm font-semibold text-success ${fontClass}`}>{t("realPhoto.upload.success")}</p>
           </div>
-          <img
-            src={state.successUrl}
-            alt="Uploaded photo"
-            className="aspect-video w-full rounded-sm border border-border object-contain bg-muted"
-          />
+          <img src={state.successUrl} alt="Uploaded photo" className="aspect-video w-full rounded-sm border border-border object-contain bg-muted" />
           <button
             type="button"
             onClick={reset}

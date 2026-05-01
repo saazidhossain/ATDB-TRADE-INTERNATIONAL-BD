@@ -23,7 +23,7 @@ export function ascii(s: string): string {
     .replace(/[\u2013\u2014]/g, "-")
     .replace(/\u2026/g, "...")
     .replace(/\u00B7/g, "·") // keep middle dot — it's WinAnsi 0xB7
-    .replace(/[^\t\n\r\x20-\x7E\u00A0-\u00FF]/g, "");
+    .replace(/[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF]/g, "");
 }
 
 export async function loadImageAsDataUrl(

@@ -35,7 +35,7 @@ export const getAnimationDuration = (fullDuration: number): number => {
 
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
-  delay: number,
+  delay: number
 ): ((...args: Parameters<T>) => void) => {
   let timeoutId: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
@@ -46,7 +46,7 @@ export const debounce = <T extends (...args: any[]) => any>(
 
 export const throttle = <T extends (...args: any[]) => any>(
   func: T,
-  limit: number,
+  limit: number
 ): ((...args: Parameters<T>) => void) => {
   let inThrottle: boolean;
   return (...args: Parameters<T>) => {
@@ -113,7 +113,10 @@ export const gpuAccelerationClasses = {
 // MOTION PREFERENCE VARIANTS
 // ─────────────────────────────────────────────────────────────────
 
-export const getMotionVariants = (fullMotion: any, reducedMotion: any) => {
+export const getMotionVariants = (
+  fullMotion: any,
+  reducedMotion: any
+) => {
   return prefersReducedMotion() ? reducedMotion : fullMotion;
 };
 
@@ -121,7 +124,10 @@ export const getMotionVariants = (fullMotion: any, reducedMotion: any) => {
 // PERFORMANCE MONITORING
 // ─────────────────────────────────────────────────────────────────
 
-export const measureAnimationPerformance = (animationName: string, callback: () => void) => {
+export const measureAnimationPerformance = (
+  animationName: string,
+  callback: () => void
+) => {
   if (typeof window === "undefined" || !window.performance) return;
 
   const startMark = `${animationName}-start`;
@@ -164,8 +170,8 @@ export const preloadImages = (urls: string[]): Promise<void[]> => {
           img.onload = () => resolve();
           img.onerror = () => resolve();
           img.src = url;
-        }),
-    ),
+        })
+    )
   );
 };
 
@@ -176,7 +182,7 @@ export const preloadImages = (urls: string[]): Promise<void[]> => {
 export const detectFrameRate = (): Promise<number> => {
   return new Promise((resolve) => {
     let frames = 0;
-    const lastTime = performance.now();
+    let lastTime = performance.now();
 
     const countFrames = () => {
       frames++;

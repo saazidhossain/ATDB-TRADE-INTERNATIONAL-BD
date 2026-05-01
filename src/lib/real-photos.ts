@@ -9,7 +9,7 @@
 // Broad glob — we accept ALL files in the folder, then validate. This lets us
 // detect and report incomplete downloads (.crdownload, .part), zero-byte files,
 // and unrecognized extensions instead of silently dropping them.
-const allModules = import.meta.glob("../assets/fleet/real/*", {
+const allModules = import.meta.glob("@/assets/fleet/real/*", {
   eager: true,
   query: "?url",
   import: "default",
@@ -31,12 +31,7 @@ const modules: Record<string, string> = {};
 for (const [path, url] of Object.entries(allModules)) {
   const file = path.split("/").pop() ?? "";
   if (!file || file.startsWith(".")) {
-    skippedBuildTime.push({
-      file,
-      path,
-      reason: "Hidden or system file (starts with `.`)",
-      category: "hidden-or-system",
-    });
+    skippedBuildTime.push({ file, path, reason: "Hidden or system file (starts with `.`)", category: "hidden-or-system" });
     continue;
   }
   if (INCOMPLETE_DOWNLOAD_EXT.test(file)) {
@@ -190,19 +185,13 @@ export function getRuntimeSkipReport(): SkippedPhoto[] {
   return Array.from(skippedRuntime.values());
 }
 
-export function getRealPhotoSkipReport(): {
-  buildTime: SkippedPhoto[];
-  runtime: SkippedPhoto[];
-  total: number;
-} {
+export function getRealPhotoSkipReport(): { buildTime: SkippedPhoto[]; runtime: SkippedPhoto[]; total: number } {
   const buildTime = getBuildTimeSkipReport();
   const runtime = getRuntimeSkipReport();
   return { buildTime, runtime, total: buildTime.length + runtime.length };
 }
 
-async function discoverHostedStoragePhotos(
-  equipmentId: string,
-): Promise<{ urls: string[]; error: string | null }> {
+async function discoverHostedStoragePhotos(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
   const folder = equipmentId.toUpperCase();
   const { data, error } = await supabase.storage.from(REAL_PHOTO_BUCKET).list(folder, {
     limit: 100,
@@ -214,12 +203,7 @@ async function discoverHostedStoragePhotos(
     if (!item.name) continue;
     const path = `${folder}/${item.name}`;
     if (item.name.startsWith(".")) {
-      recordRuntimeSkip({
-        file: item.name,
-        path,
-        reason: "Hidden or system file",
-        category: "hidden-or-system",
-      });
+      recordRuntimeSkip({ file: item.name, path, reason: "Hidden or system file", category: "hidden-or-system" });
       continue;
     }
     if (INCOMPLETE_DOWNLOAD_EXT.test(item.name)) {
@@ -250,9 +234,7 @@ async function listHostedStoragePhotos(equipmentId: string): Promise<string[]> {
   return (await discoverHostedStoragePhotos(equipmentId)).urls;
 }
 
-async function fetchRuntimePhotosState(
-  equipmentId: string,
-): Promise<{ urls: string[]; error: string | null }> {
+async function fetchRuntimePhotosState(equipmentId: string): Promise<{ urls: string[]; error: string | null }> {
   const storageDiscoveryPromise = discoverHostedStoragePhotos(equipmentId);
   const { data, error } = await supabase
     .from("real_photos")
@@ -263,9 +245,7 @@ async function fetchRuntimePhotosState(
   const storageDiscovery = await storageDiscoveryPromise;
   const registryUrls = error || !data ? [] : data.map((r) => r.public_url);
   const seen = new Set<string>();
-  const urls = [...registryUrls, ...storageDiscovery.urls].filter((url) =>
-    seen.has(url) ? false : (seen.add(url), true),
-  );
+  const urls = [...registryUrls, ...storageDiscovery.urls].filter((url) => (seen.has(url) ? false : (seen.add(url), true)));
   return {
     urls,
     error: error?.message ?? storageDiscovery.error,
@@ -280,10 +260,7 @@ export async function fetchAllHostedRealPhotos(): Promise<HostedRealPhoto[]> {
   return (await fetchAllHostedRealPhotosState()).photos;
 }
 
-async function fetchAllHostedRealPhotosState(): Promise<{
-  photos: HostedRealPhoto[];
-  error: string | null;
-}> {
+async function fetchAllHostedRealPhotosState(): Promise<{ photos: HostedRealPhoto[]; error: string | null }> {
   const [registryResult, storageResults] = await Promise.all([
     supabase
       .from("real_photos")
@@ -291,11 +268,7 @@ async function fetchAllHostedRealPhotosState(): Promise<{
       .order("sort_index", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(200),
-    Promise.allSettled(
-      FLEET.map((eq) =>
-        discoverHostedStoragePhotos(eq.id).then((discovery) => ({ eq, discovery })),
-      ),
-    ),
+    Promise.allSettled(FLEET.map((eq) => discoverHostedStoragePhotos(eq.id).then((discovery) => ({ eq, discovery })))),
   ]);
 
   const byId = new Map(FLEET.map((eq) => [eq.id.toUpperCase(), eq]));
@@ -360,11 +333,7 @@ export function useAllRealPhotos(equipmentId: string, bumpKey: number = 0): stri
   return useAllRealPhotosState(equipmentId, bumpKey).photos;
 }
 
-export function useAllRealPhotosState(
-  equipmentId: string,
-  bumpKey: number = 0,
-  pollMs: number = 30000,
-): PhotoLoadState<string> {
+export function useAllRealPhotosState(equipmentId: string, bumpKey: number = 0, pollMs: number = 30000): PhotoLoadState<string> {
   const buildTime = getRealPhotos(equipmentId);
   const [runtime, setRuntime] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -380,57 +349,30 @@ export function useAllRealPhotosState(
         setError(result.error);
         setLastUpdated(Date.now());
       })
-      .catch((err) =>
-        setError(err instanceof Error ? err.message : "Photo hosting discovery failed"),
-      )
+      .catch((err) => setError(err instanceof Error ? err.message : "Photo hosting discovery failed"))
       .finally(() => {
         setLoading(false);
         setRefreshing(false);
       });
   }, [equipmentId]);
 
-  // Wrap the real-time callback so a failure inside the subscription handler
-  // does not produce an unhandled promise rejection.
-  const onRealtimeChange = useCallback(() => {
-    try {
-      refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Real-time photo sync failed");
-    }
-  }, [refresh]);
-
   useEffect(() => {
     setLoading(true);
     refresh();
     const channel = supabase
       .channel(`detail-real-photos-${equipmentId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "real_photos",
-          filter: `equipment_id=eq.${equipmentId.toUpperCase()}`,
-        },
-        onRealtimeChange,
-      )
-      .subscribe((status, err) => {
-        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-          setError(err?.message ?? `Real-time subscription ${status}`);
-        }
-      });
+      .on("postgres_changes", { event: "*", schema: "public", table: "real_photos", filter: `equipment_id=eq.${equipmentId.toUpperCase()}` }, refresh)
+      .subscribe();
     const timer = window.setInterval(refresh, pollMs);
     return () => {
       window.clearInterval(timer);
       supabase.removeChannel(channel);
     };
-  }, [equipmentId, bumpKey, pollMs, refresh, onRealtimeChange]);
+  }, [equipmentId, bumpKey, pollMs, refresh]);
 
   // De-duplicate by URL while preserving order (build-time first, then uploads).
   const seen = new Set<string>();
-  const photos = [...buildTime, ...runtime].filter((u) =>
-    seen.has(u) ? false : (seen.add(u), true),
-  );
+  const photos = [...buildTime, ...runtime].filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
   return { photos, loading, refreshing, error, lastUpdated, refresh };
 }
 
@@ -449,44 +391,24 @@ export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<H
         setError(result.error);
         setLastUpdated(Date.now());
       })
-      .catch((err) =>
-        setError(err instanceof Error ? err.message : "Photo hosting discovery failed"),
-      )
+      .catch((err) => setError(err instanceof Error ? err.message : "Photo hosting discovery failed"))
       .finally(() => {
         setLoading(false);
         setRefreshing(false);
       });
   }, []);
 
-  // Wrap the real-time callback so a failure inside the subscription handler
-  // does not produce an unhandled promise rejection.
-  const onRealtimeChange = useCallback(() => {
-    try {
-      refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Real-time photo sync failed");
-    }
-  }, [refresh]);
-
   useEffect(() => {
     refresh();
     const channel = supabase
       .channel("homepage-real-photo-feed")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "real_photos" },
-        onRealtimeChange,
-      )
-      .subscribe((status, err) => {
-        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-          setError(err?.message ?? `Real-time subscription ${status}`);
-        }
-      });
+      .on("postgres_changes", { event: "*", schema: "public", table: "real_photos" }, refresh)
+      .subscribe();
     const timer = window.setInterval(refresh, pollMs);
     return () => {
       window.clearInterval(timer);
       supabase.removeChannel(channel);
     };
-  }, [pollMs, refresh, onRealtimeChange]);
+  }, [pollMs, refresh]);
   return { photos, loading, refreshing, error, lastUpdated, refresh };
 }

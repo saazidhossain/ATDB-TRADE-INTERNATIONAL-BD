@@ -59,34 +59,8 @@ function Stars({ value }: { value: number }) {
   );
 }
 
-const MONTHS_EN = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-const MONTHS_BN = [
-  "জানু",
-  "ফেব্রু",
-  "মার্চ",
-  "এপ্রিল",
-  "মে",
-  "জুন",
-  "জুলাই",
-  "আগস্ট",
-  "সেপ্ট",
-  "অক্টো",
-  "নভে",
-  "ডিসে",
-];
+const MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTHS_BN = ["জানু", "ফেব্রু", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্ট", "অক্টো", "নভে", "ডিসে"];
 const DIGITS_BN = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
 const toBnDigits = (s: string) => s.replace(/\d/g, (d) => DIGITS_BN[Number(d)]);
 
@@ -111,9 +85,7 @@ export function ReviewsSection() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className={`eyebrow ${fontClassEyebrow}`}>{t("reviews.eyebrow")}</p>
-            <h2 className={`mt-2 text-2xl font-bold text-iron md:text-3xl ${fontClass}`}>
-              {t("reviews.title")}
-            </h2>
+            <h2 className={`mt-2 text-2xl font-bold text-iron md:text-3xl ${fontClass}`}>{t("reviews.title")}</h2>
           </div>
           <div className="flex items-center gap-3 rounded-md border border-border bg-card px-4 py-2.5 shadow-card">
             <Stars value={reviewAggregate.rating} />
@@ -138,9 +110,7 @@ export function ReviewsSection() {
                 className="flex flex-col rounded-md border border-border bg-card p-5 shadow-card transition-transform hover:-translate-y-0.5"
               >
                 <Stars value={r.rating} />
-                <p className={`mt-3 flex-1 text-sm leading-relaxed text-iron/80 ${fontClass}`}>
-                  "{body}"
-                </p>
+                <p className={`mt-3 flex-1 text-sm leading-relaxed text-iron/80 ${fontClass}`}>"{body}"</p>
                 <div className="mt-4 border-t border-border pt-3">
                   <p className={`text-sm font-semibold text-iron ${fontClass}`}>{author}</p>
                   <p className={`text-xs text-muted-foreground ${fontClass}`}>
@@ -155,3 +125,4 @@ export function ReviewsSection() {
     </section>
   );
 }
+
