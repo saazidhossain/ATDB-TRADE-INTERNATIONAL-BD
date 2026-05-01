@@ -35,7 +35,7 @@ export function EquipmentGallery({ slots, alt, certifiedLabel, loading }: Props)
     setImageLoaded(false);
     setActive((i) => (i + 1) % slots.length);
   }, [slots.length]);
-  
+
   const prev = useCallback(() => {
     setImageLoaded(false);
     setActive((i) => (i - 1 + slots.length) % slots.length);
@@ -274,7 +274,10 @@ function Lightbox({
     if (e.touches.length === 2 && pinchRef.current) {
       const [a, b] = [e.touches[0], e.touches[1]];
       const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-      const nextZoom = Math.min(4, Math.max(1, pinchRef.current.startZoom * (dist / pinchRef.current.startDist)));
+      const nextZoom = Math.min(
+        4,
+        Math.max(1, pinchRef.current.startZoom * (dist / pinchRef.current.startDist)),
+      );
       setZoom(nextZoom);
     }
   };
@@ -405,7 +408,9 @@ function Lightbox({
                 setPan({ x: 0, y: 0 });
               }}
               className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-sm border-2 transition-all ${
-                index === i ? "border-safety scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"
+                index === i
+                  ? "border-safety scale-110 shadow-lg"
+                  : "border-transparent opacity-50 hover:opacity-100"
               }`}
             >
               <img src={slot.src} alt="" className="h-full w-full object-cover" />

@@ -60,9 +60,13 @@ export function EquipmentCard({ eq }: { eq: Equipment }) {
       </Link>
       <div className="flex flex-1 flex-col p-5">
         <div className="flex items-center gap-2">
-          <p className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-safety">{eq.id}</p>
+          <p className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-safety">
+            {eq.id}
+          </p>
           <span aria-hidden className="h-1 w-1 rounded-full bg-iron/20" />
-          <p className={`text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground ${fontClass}`}>
+          <p
+            className={`text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground ${fontClass}`}
+          >
             {getCategoryLabel(eq.category, lang)}
           </p>
         </div>

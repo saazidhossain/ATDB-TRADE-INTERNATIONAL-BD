@@ -32,7 +32,10 @@ const hits = new Map<string, number[]>();
 function checkRate(ip: string): boolean {
   const now = Date.now();
   const arr = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
-  if (arr.length >= MAX_PER_WINDOW) { hits.set(ip, arr); return false; }
+  if (arr.length >= MAX_PER_WINDOW) {
+    hits.set(ip, arr);
+    return false;
+  }
   arr.push(now);
   hits.set(ip, arr);
   if (hits.size > 500) {
@@ -47,8 +50,13 @@ async function hashIp(ip: string): Promise<string> {
   try {
     const buf = new TextEncoder().encode(ip + "|atdb-quotes");
     const digest = await crypto.subtle.digest("SHA-256", buf);
-    return Array.from(new Uint8Array(digest)).slice(0, 16).map(b => b.toString(16).padStart(2, "0")).join("");
-  } catch { return "unknown"; }
+    return Array.from(new Uint8Array(digest))
+      .slice(0, 16)
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  } catch {
+    return "unknown";
+  }
 }
 
 export const Route = createFileRoute("/api/quotes")({
@@ -67,10 +75,18 @@ export const Route = createFileRoute("/api/quotes")({
         }
 
         let body: unknown;
-        try { body = await request.json(); } catch { return json({ ok: false, error: "invalid_json" }, 400); }
+        try {
+          body = await request.json();
+        } catch {
+          return json({ ok: false, error: "invalid_json" }, 400);
+        }
 
         const parsed = QuoteSchema.safeParse(body);
-        if (!parsed.success) return json({ ok: false, error: "validation_error", issues: parsed.error.flatten() }, 400);
+        if (!parsed.success)
+          return json(
+            { ok: false, error: "validation_error", issues: parsed.error.flatten() },
+            400,
+          );
 
         const ipHash = await hashIp(ip);
 

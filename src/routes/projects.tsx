@@ -43,12 +43,21 @@ export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
       { title: "Executed Projects — ATDB Trade International" },
-      { name: "description", content: "ATDB's portfolio: BRT Airport-Gazipur, Jamuna Bridge Contract 1, RTIP-2 Ghatail, Centeon Pharma, Pharmacil, Pharma Ashia, AMC Knit Composite, SMC ORS, Nassa Super Garments — 14 executed heavy-engineering & civil projects across Bangladesh." },
+      {
+        name: "description",
+        content:
+          "ATDB's portfolio: BRT Airport-Gazipur, Jamuna Bridge Contract 1, RTIP-2 Ghatail, Centeon Pharma, Pharmacil, Pharma Ashia, AMC Knit Composite, SMC ORS, Nassa Super Garments — 14 executed heavy-engineering & civil projects across Bangladesh.",
+      },
       { property: "og:title", content: "ATDB Trade International — Executed Projects Portfolio" },
-      { property: "og:description", content: "14 executed projects across mega-infrastructure, industrial, roadways and specialised civil works." },
+      {
+        property: "og:description",
+        content:
+          "14 executed projects across mega-infrastructure, industrial, roadways and specialised civil works.",
+      },
       { property: "og:image", content: HERO_PROJECT_IMAGE },
       { name: "twitter:image", content: HERO_PROJECT_IMAGE },
     ],
+    links: [{ rel: "canonical", href: "https://www.atdbtrade.com/projects" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -80,10 +89,17 @@ function ProjectsPage() {
       <section className="relative overflow-hidden bg-iron-deep py-24 text-white">
         <div
           className="absolute inset-0 opacity-25"
-          style={{ backgroundImage: `url(${HERO_PROJECT_IMAGE})`, backgroundSize: "cover", backgroundPosition: "center" }}
+          style={{
+            backgroundImage: `url(${HERO_PROJECT_IMAGE})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-iron-deep via-iron-deep/85 to-iron-deep/40" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-iron-deep via-iron-deep/85 to-iron-deep/40"
+          aria-hidden="true"
+        />
         <div className="container-page relative">
           <p className={`eyebrow !text-bronze-glow ${fontClassEyebrow}`}>{t("projects.eyebrow")}</p>
           <h1 className={`mt-2 max-w-3xl text-4xl font-bold text-white md:text-5xl ${fontClass}`}>
@@ -118,10 +134,15 @@ function ProjectsPage() {
             <div className="container-page">
               <div className="flex items-end justify-between gap-6">
                 <div>
-                  <p className={`text-[11px] font-bold uppercase tracking-[0.2em] text-safety ${fontClass}`}>
-                    {String(idx + 1).padStart(2, "0")} · {items.length} {items.length === 1 ? "project" : "projects"}
+                  <p
+                    className={`text-[11px] font-bold uppercase tracking-[0.2em] text-safety ${fontClass}`}
+                  >
+                    {String(idx + 1).padStart(2, "0")} · {items.length}{" "}
+                    {items.length === 1 ? "project" : "projects"}
                   </p>
-                  <h2 className={`mt-2 max-w-2xl text-2xl font-bold text-iron md:text-3xl ${fontClass}`}>
+                  <h2
+                    className={`mt-2 max-w-2xl text-2xl font-bold text-iron md:text-3xl ${fontClass}`}
+                  >
                     {t(cat.titleKey as Parameters<typeof t>[0])}
                   </h2>
                   <p className={`mt-1.5 max-w-xl text-sm text-muted-foreground ${fontClass}`}>
@@ -157,14 +178,20 @@ function ProjectsPage() {
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-iron-deep/40 via-transparent to-transparent" />
                     </div>
                     <div className="flex flex-1 flex-col p-5">
-                      <p className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-safety ${fontClass}`}>
+                      <p
+                        className={`flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-safety ${fontClass}`}
+                      >
                         <MapPin className="h-3 w-3" />
                         {t(p.locationKey as Parameters<typeof t>[0])}
                       </p>
-                      <h3 className={`mt-1.5 text-lg font-bold leading-tight text-iron ${fontClass}`}>
+                      <h3
+                        className={`mt-1.5 text-lg font-bold leading-tight text-iron ${fontClass}`}
+                      >
                         {t(p.titleKey as Parameters<typeof t>[0])}
                       </h3>
-                      <p className={`mt-2 text-sm leading-relaxed text-muted-foreground ${fontClass}`}>
+                      <p
+                        className={`mt-2 text-sm leading-relaxed text-muted-foreground ${fontClass}`}
+                      >
                         {t(p.scopeKey as Parameters<typeof t>[0])}
                       </p>
                     </div>
@@ -180,13 +207,14 @@ function ProjectsPage() {
       <section className="bg-gradient-safety py-14 text-white">
         <div className="container-page flex flex-col items-start justify-between gap-5 md:flex-row md:items-center">
           <div>
-            <h2 className={`text-2xl font-bold text-white md:text-3xl ${fontClass}`}>{t("projects.cta.title")}</h2>
-            <p className={`mt-1 max-w-xl text-sm text-white/90 ${fontClass}`}>{t("projects.cta.body")}</p>
+            <h2 className={`text-2xl font-bold text-white md:text-3xl ${fontClass}`}>
+              {t("projects.cta.title")}
+            </h2>
+            <p className={`mt-1 max-w-xl text-sm text-white/90 ${fontClass}`}>
+              {t("projects.cta.body")}
+            </p>
           </div>
-          <WhatsappButton
-            href={buildWhatsappGenericLink(undefined, lang)}
-            variant="ctaDark"
-          >
+          <WhatsappButton href={buildWhatsappGenericLink(undefined, lang)} variant="ctaDark">
             {t("home.cta.button")}
           </WhatsappButton>
         </div>

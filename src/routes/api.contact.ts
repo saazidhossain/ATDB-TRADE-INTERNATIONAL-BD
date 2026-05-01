@@ -83,7 +83,11 @@ export const Route = createFileRoute("/api/contact")({
 
         if (!checkRate(ip)) {
           return json(
-            { ok: false, error: "rate_limited", message: "Too many requests. Please try again in a few minutes." },
+            {
+              ok: false,
+              error: "rate_limited",
+              message: "Too many requests. Please try again in a few minutes.",
+            },
             429,
           );
         }

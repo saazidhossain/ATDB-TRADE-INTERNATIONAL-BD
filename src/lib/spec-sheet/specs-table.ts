@@ -4,24 +4,10 @@
 
 import type { jsPDF } from "jspdf";
 import { CATEGORIES, type Equipment } from "@/lib/atdb-data";
-import {
-  ascii,
-  BORDER,
-  BORDER_SOFT,
-  IRON,
-  MARGIN,
-  MUTED,
-  SAFETY,
-  ZEBRA,
-} from "./tokens";
+import { ascii, BORDER, BORDER_SOFT, IRON, MARGIN, MUTED, SAFETY, ZEBRA } from "./tokens";
 import type { Strings } from "./strings";
 
-export function renderSpecsTable(
-  doc: jsPDF,
-  eq: Equipment,
-  S: Strings,
-  startY: number,
-): number {
+export function renderSpecsTable(doc: jsPDF, eq: Equipment, S: Strings, startY: number): number {
   const pageW = doc.internal.pageSize.getWidth();
 
   // Section heading

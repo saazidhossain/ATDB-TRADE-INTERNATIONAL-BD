@@ -20,8 +20,17 @@ export function SiteFooter() {
   ];
 
   const officeFor = (city: string) => {
-    if (city === "Dhaka") return { label: t("office.corporate"), city: t("office.dhaka"), addr: t("office.dhaka.address") };
-    return { label: t("office.branch"), city: t("office.tangail"), addr: t("office.tangail.address") };
+    if (city === "Dhaka")
+      return {
+        label: t("office.corporate"),
+        city: t("office.dhaka"),
+        addr: t("office.dhaka.address"),
+      };
+    return {
+      label: t("office.branch"),
+      city: t("office.tangail"),
+      addr: t("office.tangail.address"),
+    };
   };
 
   return (
@@ -37,7 +46,13 @@ export function SiteFooter() {
 
       <div className="container-page relative grid gap-10 py-14 sm:grid-cols-2 md:gap-x-10 md:gap-y-12 md:py-16 lg:grid-cols-12">
         <div className="sm:col-span-2 lg:col-span-4">
-          <img src={logo} alt="ATDB Trade International" width={220} height={64} className="h-14 w-auto object-contain" />
+          <img
+            src={logo}
+            alt="ATDB Trade International"
+            width={220}
+            height={64}
+            className="h-14 w-auto object-contain"
+          />
           <p className={`mt-5 max-w-xs text-sm leading-relaxed text-white/65 ${fontClass}`}>
             {t("footer.tagline")}
           </p>
@@ -48,7 +63,10 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-2 text-sm">
             {links.map((i) => (
               <li key={i.to}>
-                <Link to={i.to} className={`text-white/75 transition-colors hover:text-safety ${fontClass}`}>
+                <Link
+                  to={i.to}
+                  className={`text-white/75 transition-colors hover:text-safety ${fontClass}`}
+                >
                   {i.l}
                 </Link>
               </li>
@@ -78,13 +96,19 @@ export function SiteFooter() {
           <h4 className="eyebrow !text-bronze-glow">{t("footer.contact")}</h4>
           <ul className={`mt-4 space-y-2.5 text-sm text-white/75 ${fontClass}`}>
             <li>
-              <a href={`tel:${COMPANY.phones[0].number}`} className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep rounded-sm">
+              <a
+                href={`tel:${COMPANY.phones[0].number}`}
+                className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep rounded-sm"
+              >
                 <Phone className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2} />
                 <span>{COMPANY.phones[0].number}</span>
               </a>
             </li>
             <li>
-              <a href={`mailto:${COMPANY.email}`} className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep rounded-sm">
+              <a
+                href={`mailto:${COMPANY.email}`}
+                className="inline-flex items-center gap-2.5 break-all transition-colors hover:text-safety focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-safety focus-visible:ring-offset-2 focus-visible:ring-offset-iron-deep rounded-sm"
+              >
                 <Mail className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2} />
                 <span>{COMPANY.email}</span>
               </a>
@@ -118,7 +142,8 @@ export function SiteFooter() {
       <div className="relative border-t border-white/10">
         <div className="container-page flex items-center justify-center py-5">
           <p className={`text-xs text-white/50 ${fontClass}`}>
-            © {year ?? "—"} <span className="font-semibold text-white/70">{COMPANY.name}</span>. {t("footer.rights")}
+            © {year ?? "—"} <span className="font-semibold text-white/70">{COMPANY.name}</span>.{" "}
+            {t("footer.rights")}
           </p>
         </div>
       </div>

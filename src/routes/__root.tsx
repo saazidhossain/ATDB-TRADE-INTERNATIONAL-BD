@@ -32,7 +32,11 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ATDB Trade International | Premier Heavy Equipment Rental in Bangladesh" },
-      { name: "description", content: "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects." },
+      {
+        name: "description",
+        content:
+          "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects.",
+      },
       { name: "author", content: "ATDB Trade International" },
       { name: "robots", content: "index,follow,max-image-preview:large,max-snippet:-1" },
       { name: "theme-color", content: "#1a1a1a" },
@@ -41,17 +45,41 @@ export const Route = createRootRoute({
       { property: "og:locale", content: "en_US" },
       { property: "og:locale:alternate", content: "bn_BD" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "ATDB Trade International | Premier Heavy Equipment Rental in Bangladesh" },
-      { name: "twitter:title", content: "ATDB Trade International | Premier Heavy Equipment Rental in Bangladesh" },
-      { property: "og:description", content: "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects." },
-      { name: "twitter:description", content: "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects." },
+      {
+        property: "og:title",
+        content: "ATDB Trade International | Premier Heavy Equipment Rental in Bangladesh",
+      },
+      {
+        name: "twitter:title",
+        content: "ATDB Trade International | Premier Heavy Equipment Rental in Bangladesh",
+      },
+      {
+        property: "og:description",
+        content:
+          "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Bangladesh's trusted heavy equipment rental partner since 2000. Mobile cranes, excavators, road rollers, and support equipment for mega-infrastructure projects.",
+      },
       { property: "og:url", content: "https://www.atdbtrade.com" },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e50bbcf7-c7b8-45e1-a9bf-c1598573f482" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e50bbcf7-c7b8-45e1-a9bf-c1598573f482" },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e50bbcf7-c7b8-45e1-a9bf-c1598573f482",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e50bbcf7-c7b8-45e1-a9bf-c1598573f482",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "canonical", href: "https://www.atdbtrade.com" },
+      { rel: "alternate", hreflang: "en", href: "https://www.atdbtrade.com" },
+      { rel: "alternate", hreflang: "bn", href: "https://www.atdbtrade.com" },
     ],
     scripts: [
       {
@@ -77,6 +105,32 @@ export const Route = createRootRoute({
               url: "https://www.atdbtrade.com",
               name: "ATDB Trade International",
               publisher: { "@id": "https://www.atdbtrade.com/#organization" },
+            },
+            {
+              "@type": "LocalBusiness",
+              "@id": "https://www.atdbtrade.com/#localbusiness",
+              name: "ATDB Trade International",
+              url: "https://www.atdbtrade.com",
+              telephone: "+8801712106242",
+              email: "atdbtrade@gmail.com",
+              address: [
+                {
+                  "@type": "PostalAddress",
+                  streetAddress: "House #319 (8F), Lane #8, East Kazi Para, Kafrul",
+                  addressLocality: "Dhaka",
+                  postalCode: "1216",
+                  addressCountry: "BD",
+                },
+                {
+                  "@type": "PostalAddress",
+                  streetAddress: "House #311 (2F), Boro Kalibari Road",
+                  addressLocality: "Tangail",
+                  postalCode: "1900",
+                  addressCountry: "BD",
+                },
+              ],
+              openingHours: "Mo-Sa 08:00-18:00",
+              priceRange: "$$",
             },
           ],
         }),

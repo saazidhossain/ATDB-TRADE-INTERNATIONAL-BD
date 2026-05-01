@@ -48,8 +48,7 @@ export function ContactChannelButton({
     channel === "phone"
       ? {
           orbBg: "bg-gradient-to-br from-[hsl(24,94%,53%)] to-[hsl(20,90%,42%)]",
-          orbShadow:
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_2px_8px_rgba(245,124,0,0.45)]",
+          orbShadow: "shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_2px_8px_rgba(245,124,0,0.45)]",
           haloFooter:
             "conic-gradient(from 180deg at 50% 50%, rgba(245,124,0,0.55), rgba(212,162,77,0.4), rgba(245,124,0,0.55))",
           haloHeader:
@@ -60,8 +59,7 @@ export function ContactChannelButton({
         }
       : {
           orbBg: "bg-gradient-to-br from-[hsl(28,32%,28%)] to-[hsl(28,40%,18%)]",
-          orbShadow:
-            "shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_2px_8px_rgba(58,42,28,0.55)]",
+          orbShadow: "shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_2px_8px_rgba(58,42,28,0.55)]",
           haloFooter:
             "conic-gradient(from 180deg at 50% 50%, rgba(212,162,77,0.6), rgba(245,124,0,0.4), rgba(212,162,77,0.6))",
           haloHeader:
@@ -138,7 +136,9 @@ export function ContactChannelButton({
         <span className="relative z-10 flex min-w-0 flex-col leading-tight">
           <span className={`truncate tracking-wide ${fontClass}`}>{children}</span>
           {sublabel && (
-            <span className={`mt-0.5 truncate text-[10px] font-normal uppercase tracking-[0.16em] text-white/55 ${fontClass}`}>
+            <span
+              className={`mt-0.5 truncate text-[10px] font-normal uppercase tracking-[0.16em] text-white/55 ${fontClass}`}
+            >
               {sublabel}
             </span>
           )}
@@ -178,11 +178,15 @@ export function ContactChannelButton({
           />
         </span>
         <div className="relative z-10 flex min-w-0 flex-1 flex-col">
-          <span className={`truncate font-display text-sm font-semibold text-iron ${accent.textHover} transition-colors`}>
+          <span
+            className={`truncate font-display text-sm font-semibold text-iron ${accent.textHover} transition-colors`}
+          >
             {children}
           </span>
           {sublabel && (
-            <span className={`mt-0.5 truncate text-xs text-muted-foreground ${fontClass}`}>{sublabel}</span>
+            <span className={`mt-0.5 truncate text-xs text-muted-foreground ${fontClass}`}>
+              {sublabel}
+            </span>
           )}
         </div>
       </motion.a>

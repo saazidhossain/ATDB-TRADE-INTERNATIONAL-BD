@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layout } from "@/components/atdb/Layout";
 import { COMPANY } from "@/lib/atdb-data";
-import { ShieldCheck, FileCheck, Building2, Leaf, Globe2, Users, HardHat, Briefcase, LineChart } from "lucide-react";
+import {
+  ShieldCheck,
+  FileCheck,
+  Building2,
+  Leaf,
+  Globe2,
+  Users,
+  HardHat,
+  Briefcase,
+  LineChart,
+} from "lucide-react";
 import { useI18n, useFontClass } from "@/lib/i18n";
 import aboutOg from "@/assets/brand/atdb-hero-monument.webp";
 
@@ -9,12 +19,21 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "About ATDB — 26 Years of Heavy Equipment Excellence in Bangladesh" },
-      { name: "description", content: "Founded in 2000, ATDB Trade International is a 1st Class government-approved contractor and heavy equipment supplier with offices in Dhaka and Tangail." },
+      {
+        name: "description",
+        content:
+          "Founded in 2000, ATDB Trade International is a 1st Class government-approved contractor and heavy equipment supplier with offices in Dhaka and Tangail.",
+      },
       { property: "og:title", content: "About ATDB Trade International" },
-      { property: "og:description", content: "26 years building Bangladesh — certified fleet, 25 staff, 2 offices, government-compliant." },
+      {
+        property: "og:description",
+        content:
+          "26 years building Bangladesh — certified fleet, 25 staff, 2 offices, government-compliant.",
+      },
       { property: "og:image", content: aboutOg },
       { name: "twitter:image", content: aboutOg },
     ],
+    links: [{ rel: "canonical", href: "https://www.atdbtrade.com/about" }],
   }),
   component: AboutPage,
 });
@@ -60,9 +79,7 @@ function AboutPage() {
           <h1 className={`mt-2 max-w-3xl text-4xl font-bold text-white md:text-5xl ${fontClass}`}>
             {t("about.title")}
           </h1>
-          <p className={`mt-5 max-w-2xl text-lg text-white/80 ${fontClass}`}>
-            {t("about.lede")}
-          </p>
+          <p className={`mt-5 max-w-2xl text-lg text-white/80 ${fontClass}`}>{t("about.lede")}</p>
         </div>
       </section>
 
@@ -70,21 +87,35 @@ function AboutPage() {
         <div className="container-page grid gap-12 lg:grid-cols-2">
           <div>
             <p className={`eyebrow ${fontClassEyebrow}`}>{t("about.leadership")}</p>
-            <h2 className={`mt-2 text-3xl font-bold text-iron ${fontClass}`}>{t("about.leadership.title")}</h2>
+            <h2 className={`mt-2 text-3xl font-bold text-iron ${fontClass}`}>
+              {t("about.leadership.title")}
+            </h2>
             <div className="mt-8 space-y-6">
               <div className="card-glass rounded-md border-safety-top p-6">
-                <p className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}>{t("about.role.proprietor")}</p>
-                <p className="mt-1 font-display text-xl font-semibold text-iron">{COMPANY.proprietor}</p>
+                <p
+                  className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}
+                >
+                  {t("about.role.proprietor")}
+                </p>
+                <p className="mt-1 font-display text-xl font-semibold text-iron">
+                  {COMPANY.proprietor}
+                </p>
               </div>
               <div className="card-glass rounded-md border-safety-top p-6">
-                <p className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}>{t("about.role.ceo")}</p>
+                <p
+                  className={`text-xs uppercase tracking-[0.18em] text-muted-foreground ${fontClass}`}
+                >
+                  {t("about.role.ceo")}
+                </p>
                 <p className="mt-1 font-display text-xl font-semibold text-iron">{COMPANY.ceo}</p>
               </div>
             </div>
           </div>
           <div>
             <p className={`eyebrow ${fontClassEyebrow}`}>{t("about.credentials")}</p>
-            <h2 className={`mt-2 text-3xl font-bold text-iron ${fontClass}`}>{t("about.credentials.title")}</h2>
+            <h2 className={`mt-2 text-3xl font-bold text-iron ${fontClass}`}>
+              {t("about.credentials.title")}
+            </h2>
             <dl className="mt-8 divide-y divide-border rounded-md border border-border glass-card shadow-card">
               {CREDENTIALS.map(([k, v]) => (
                 <div key={k} className="flex items-start justify-between gap-6 px-6 py-4">
@@ -122,13 +153,15 @@ function AboutPage() {
                   className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
                 />
                 <div className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-sm border border-iron/15 bg-white/40 backdrop-blur-md backdrop-saturate-150 transition-colors group-hover:border-safety/50">
-                  <span
-                    className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-[hsl(24,94%,53%)] to-[hsl(20,90%,42%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_2px_8px_rgba(245,124,0,0.45)] ring-1 ring-white/30 transition-transform duration-300 group-hover:rotate-[10deg]"
-                  >
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-[hsl(24,94%,53%)] to-[hsl(20,90%,42%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_2px_8px_rgba(245,124,0,0.45)] ring-1 ring-white/30 transition-transform duration-300 group-hover:rotate-[10deg]">
                     <v.icon className="h-4 w-4 text-white" strokeWidth={2.2} />
                   </span>
                 </div>
-                <h3 className={`relative mt-4 text-lg font-semibold text-iron transition-colors group-hover:text-safety ${fontClass}`}>{v.t}</h3>
+                <h3
+                  className={`relative mt-4 text-lg font-semibold text-iron transition-colors group-hover:text-safety ${fontClass}`}
+                >
+                  {v.t}
+                </h3>
                 <p className={`relative mt-2 text-sm text-muted-foreground ${fontClass}`}>{v.d}</p>
               </div>
             ))}
@@ -143,14 +176,17 @@ function AboutPage() {
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-60"
           style={{
-            background:
-              "radial-gradient(80% 60% at 50% 0%, rgba(245,124,0,0.18), transparent 70%)",
+            background: "radial-gradient(80% 60% at 50% 0%, rgba(245,124,0,0.18), transparent 70%)",
           }}
         />
         <div className="container-page relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-14">
           <div>
-            <p className={`eyebrow !text-bronze-glow ${fontClassEyebrow}`}>{t("about.associate.eyebrow")}</p>
-            <h2 className={`mt-2 max-w-[28ch] text-balance text-3xl font-bold leading-[1.15] text-white md:text-4xl md:leading-[1.18] ${fontClass}`}>
+            <p className={`eyebrow !text-bronze-glow ${fontClassEyebrow}`}>
+              {t("about.associate.eyebrow")}
+            </p>
+            <h2
+              className={`mt-2 max-w-[28ch] text-balance text-3xl font-bold leading-[1.15] text-white md:text-4xl md:leading-[1.18] ${fontClass}`}
+            >
               {t("about.associate.title")}
             </h2>
             <p
@@ -161,7 +197,10 @@ function AboutPage() {
               {t("about.associate.body")}
             </p>
 
-            <ul className="mt-8 flex flex-wrap gap-x-2.5 gap-y-3" aria-label={t("about.associate.eyebrow")}>
+            <ul
+              className="mt-8 flex flex-wrap gap-x-2.5 gap-y-3"
+              aria-label={t("about.associate.eyebrow")}
+            >
               {ASSOCIATE_TAGS.map((tag) => (
                 <li key={tag.label}>
                   <span
@@ -169,7 +208,11 @@ function AboutPage() {
                       lang === "bn" ? "py-2 text-[13px] leading-[1.4]" : ""
                     }`}
                   >
-                    <tag.icon aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-bronze-glow" strokeWidth={2.2} />
+                    <tag.icon
+                      aria-hidden="true"
+                      className="h-3.5 w-3.5 shrink-0 text-bronze-glow"
+                      strokeWidth={2.2}
+                    />
                     {tag.label}
                   </span>
                 </li>
@@ -179,8 +222,14 @@ function AboutPage() {
 
           <div className="grid gap-4">
             <div className="card-glass-dark group rounded-md p-6">
-              <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
-                <Globe2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+              <p
+                className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}
+              >
+                <Globe2
+                  aria-hidden="true"
+                  className="h-3.5 w-3.5 text-bronze-glow"
+                  strokeWidth={2.2}
+                />
                 {t("about.associate.regions")}
               </p>
               <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5 sm:grid-cols-3">
@@ -197,8 +246,14 @@ function AboutPage() {
             </div>
 
             <div className="card-glass-dark group rounded-md p-6">
-              <p className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}>
-                <Building2 aria-hidden="true" className="h-3.5 w-3.5 text-bronze-glow" strokeWidth={2.2} />
+              <p
+                className={`flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/55 ${fontClass}`}
+              >
+                <Building2
+                  aria-hidden="true"
+                  className="h-3.5 w-3.5 text-bronze-glow"
+                  strokeWidth={2.2}
+                />
                 {t("about.eyebrow")}
               </p>
               <ul className="mt-4 flex flex-wrap gap-2">

@@ -61,9 +61,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === eq.id);
       if (existing) {
-        return prev.map((i) =>
-          i.id === eq.id ? { ...i, qty: Math.min(99, i.qty + qty) } : i
-        );
+        return prev.map((i) => (i.id === eq.id ? { ...i, qty: Math.min(99, i.qty + qty) } : i));
       }
       return [...prev, { id: eq.id, name: eq.name, capacity: eq.capacity, qty }];
     });
@@ -87,7 +85,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const setProject = (p: Partial<CartProject>) => setProjectState((prev) => ({ ...prev, ...p }));
 
   const count = items.reduce((sum, i) => sum + i.qty, 0);
-  const whatsappUrl = useMemo(() => buildWhatsappCartLink(items, project, lang), [items, project, lang]);
+  const whatsappUrl = useMemo(
+    () => buildWhatsappCartLink(items, project, lang),
+    [items, project, lang],
+  );
 
   const value: CartCtx = {
     items,

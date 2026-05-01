@@ -18,7 +18,10 @@ export function buildSpecGroups(eq: Equipment, t: (k: string) => string): Group[
       icon: Ruler,
       rows: [
         { label: t("spec.row.capacity"), value: eq.capacity },
-        { label: t("spec.row.config"), value: eq.notes ?? (isCrane ? t("spec.val.telescopic") : t("spec.val.standard")) },
+        {
+          label: t("spec.row.config"),
+          value: eq.notes ?? (isCrane ? t("spec.val.telescopic") : t("spec.val.standard")),
+        },
         { label: t("spec.row.origin"), value: eq.origin },
         { label: t("spec.row.year"), value: eq.year ? String(eq.year) : t("spec.val.dash") },
       ],
@@ -31,7 +34,14 @@ export function buildSpecGroups(eq: Equipment, t: (k: string) => string): Group[
         { label: t("spec.row.rated"), value: eq.capacity },
         { label: t("spec.row.operator"), value: t("spec.val.operatorIncl") },
         { label: t("spec.row.mobilisation"), value: t("spec.val.onRequest") },
-        { label: t("spec.row.workMode"), value: isRoller ? t("spec.val.vibratory") : isCrane ? t("spec.val.lift") : t("spec.val.cyclic") },
+        {
+          label: t("spec.row.workMode"),
+          value: isRoller
+            ? t("spec.val.vibratory")
+            : isCrane
+              ? t("spec.val.lift")
+              : t("spec.val.cyclic"),
+        },
       ],
     },
     {
@@ -42,7 +52,10 @@ export function buildSpecGroups(eq: Equipment, t: (k: string) => string): Group[
         { label: t("spec.row.fuel"), value: eq.fuel ?? t("spec.val.diesel") },
         { label: t("spec.row.brand"), value: eq.brand },
         { label: t("spec.row.model"), value: eq.model },
-        { label: t("spec.row.drive"), value: isCrane ? t("spec.val.allTerrain") : t("spec.val.oem") },
+        {
+          label: t("spec.row.drive"),
+          value: isCrane ? t("spec.val.allTerrain") : t("spec.val.oem"),
+        },
       ],
     },
     {
@@ -103,7 +116,11 @@ export function SpecGroupsAccordion({ eq }: { eq: Equipment }) {
                 <span className="grid h-8 w-8 place-items-center rounded-sm bg-gradient-iron text-white">
                   <Icon className="h-4 w-4" />
                 </span>
-                <span className={`text-[11px] font-bold uppercase tracking-[0.18em] text-safety ${fontClass}`}>{g.title}</span>
+                <span
+                  className={`text-[11px] font-bold uppercase tracking-[0.18em] text-safety ${fontClass}`}
+                >
+                  {g.title}
+                </span>
               </span>
               <motion.span
                 animate={{ rotate: isOpen ? 180 : 0 }}
@@ -137,12 +154,22 @@ export function SpecGroupsAccordion({ eq }: { eq: Equipment }) {
                         key={r.label}
                         variants={{
                           hidden: { opacity: 0, y: 8 },
-                          visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+                          visible: {
+                            opacity: 1,
+                            y: 0,
+                            transition: { duration: 0.3, ease: "easeOut" },
+                          },
                         }}
                         className="flex items-start justify-between gap-6 bg-card px-5 py-3"
                       >
-                        <dt className={`text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground ${fontClass}`}>{r.label}</dt>
-                        <dd className={`text-right text-sm font-semibold text-iron ${fontClass}`}>{r.value}</dd>
+                        <dt
+                          className={`text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground ${fontClass}`}
+                        >
+                          {r.label}
+                        </dt>
+                        <dd className={`text-right text-sm font-semibold text-iron ${fontClass}`}>
+                          {r.value}
+                        </dd>
                       </motion.div>
                     ))}
                   </motion.dl>
