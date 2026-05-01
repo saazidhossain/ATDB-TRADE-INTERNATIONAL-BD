@@ -465,8 +465,10 @@ export function useHostedRealPhotoFeed(pollMs: number = 15000): PhotoLoadState<H
   // Build-time photos appear first so real on-site shots are always visible even
   // before Supabase responds.
   const seen = new Set<string>();
-  const photos = [...buildTimePhotos, ...hostedPhotos].filter((p) =>
-    seen.has(p.url) ? false : (seen.add(p.url), true),
-  );
+  const photos = [...buildTimePhotos, ...hostedPhotos].filter((p) => {
+    if (seen.has(p.url)) return false;
+    seen.add(p.url);
+    return true;
+  });
   return { photos, loading, refreshing, error, lastUpdated, refresh };
 }
